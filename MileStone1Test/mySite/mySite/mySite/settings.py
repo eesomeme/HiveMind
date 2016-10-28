@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    #Boostrap3
+    'bootstrap3',
 ]
 
 MIDDLEWARE = [
@@ -60,7 +63,7 @@ ROOT_URLCONF = 'mySite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['C:/Users/Vasim/Desktop/HiveMind/HiveMind/MileStone1Test/mysite/mysite/mysite/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
