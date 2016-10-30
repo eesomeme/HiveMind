@@ -11,13 +11,13 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Navbar Template for Bootstrap</title>
+    <title>{% block head_title %}{% endblock %}</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <link href="{% static 'css/ie10-viewport-bug-workaround.css'}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href=" {% static 'css/navbar.css' %}" rel="stylesheet">
@@ -41,7 +41,10 @@
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
         <h1> <!-- H1 INFO --></h1>
-        <p></p>
+        <p>
+            {% block content %}
+            {% endblock %}
+        </p>
         <p>
           <!-- <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a> -->
         </p>
