@@ -5,7 +5,7 @@ from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout as auth_logout
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.decorators.debug import sensitive_post_parameters
 from django.utils.decorators import method_decorator
 
@@ -90,7 +90,7 @@ class LoginView(RedirectAuthenticatedUserMixin,
                 FormView):
     form_class = LoginForm
     template_name = "account/login." + app_settings.TEMPLATE_EXTENSION
-    success_url = None
+    success_url = ""
     redirect_field_name = "next"
 
     @sensitive_post_parameters_m
@@ -723,3 +723,7 @@ class EmailVerificationSentView(TemplateView):
         'account/verification_sent.' + app_settings.TEMPLATE_EXTENSION)
 
 email_verification_sent = EmailVerificationSentView.as_view()
+
+# Test
+def profile(request):
+    return render(request, 'account/account_profile.html')
