@@ -723,3 +723,13 @@ class EmailVerificationSentView(TemplateView):
         'account/verification_sent.' + app_settings.TEMPLATE_EXTENSION)
 
 email_verification_sent = EmailVerificationSentView.as_view()
+<<<<<<< Updated upstream
+=======
+
+# Test
+def profile(request):
+    return render(request, 'account/account_profile.html')
+
+def account_settings(request):
+    return render(request, 'account/account_settings.html')
+>>>>>>> Stashed changes

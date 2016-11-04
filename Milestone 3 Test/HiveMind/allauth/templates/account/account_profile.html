@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+import
+
+{% load i18n %}
+{% block head_title %}{% trans "Profile" %}{% endblock %}
+
+{% block content %}
+   <h2>Welcome, {{user}}!</h2> 
+
+   <ul class="navbar">
+  <li><a href="account_settings.html">My Account</a>
+  </ul>
+  {% endblock %}

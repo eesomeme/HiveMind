@@ -30,4 +30,12 @@ urlpatterns = [
         name="account_reset_password_from_key"),
     url(r"^password/reset/key/done/$", views.password_reset_from_key_done,
         name="account_reset_password_from_key_done"),
+<<<<<<< Updated upstream
+=======
+
+    # profile
+    url(r"^profile/$", views.profile, name="account_profile"),
+    url(r"^login/$", views.login, name="account_login"),
+    url(r"^profile/account_settings/$", views.account_settings, name = "account_settings"),
+>>>>>>> Stashed changes
 ]
