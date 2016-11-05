@@ -39,11 +39,17 @@
                 <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <!-- <li><a href="javascript:void(0)"></a></li> -->
-                <li><a href="/accounts/login">Login</a></li>
+                {% if request.user.is_authenticated %}
                 <li><a href="/accounts/logout">Logout</a></li>
-                <li><a href="/accounts/signup">Signup</a></li>
                 <li class="divider"></li>
                 <li><a href="/accounts/profile">Profile</a></li>
+                {% else %}
+                <li><a href="/accounts/login">Login</a></li>
+                <li><a href="/accounts/signup">Signup</a></li>
+                <!-- <li class="divider"></li> -->
+                <!-- <li><a href="/accounts/profile">Profile</a></li> -->
+                {% endif %}
+
               </ul>
             </li>
           </ul>
