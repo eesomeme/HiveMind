@@ -33,5 +33,5 @@ urlpatterns = [
 
     # profile
     url(r"^profile/$", views.profile, name="account_profile"),
-    url(r"^login/$", views.login, name="account_login"),
+
 ]
