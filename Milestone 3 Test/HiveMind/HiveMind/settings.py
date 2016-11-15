@@ -142,6 +142,9 @@ AUTHENTICATION_BACKENDS = (
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-LOGIN_REDIRECT_URL = "/accounts/profile"
+# LOGIN_REDIRECT_URL = "/account/profile"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 SITE_ID = 1

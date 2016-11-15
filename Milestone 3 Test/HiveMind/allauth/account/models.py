@@ -18,6 +18,9 @@ from .utils import user_email
 from .managers import EmailAddressManager, EmailConfirmationManager
 from .adapter import get_adapter
 
+from django.contrib.auth.models import User
+
+
 @python_2_unicode_compatible
 class EmailAddress(models.Model):
 
@@ -175,3 +178,12 @@ class EmailConfirmationHMAC:
                                              request=request,
                                              confirmation=self,
                                              signup=signup)
+
+class Document(models.Model):
+    description = models.CharField(max_length=250, blank=True)
+    document = models.FileField()
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, default=1)
+
+    def __str__(self):
+        return self.description

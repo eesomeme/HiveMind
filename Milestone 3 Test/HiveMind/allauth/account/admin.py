@@ -1,7 +1,7 @@
 import django
 from django.contrib import admin
 
-from .models import EmailConfirmation, EmailAddress
+from .models import EmailConfirmation, EmailAddress, Document
 from .adapter import get_adapter
 
 
@@ -29,3 +29,4 @@ class EmailConfirmationAdmin(admin.ModelAdmin):
 
 admin.site.register(EmailConfirmation, EmailConfirmationAdmin)
 admin.site.register(EmailAddress, EmailAddressAdmin)
+admin.site.register(Document)

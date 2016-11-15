@@ -560,3 +560,11 @@ class UserTokenForm(forms.Form):
             raise forms.ValidationError(self.error_messages['token_invalid'])
 
         return cleaned_data
+
+from .models import Document
+
+class DocumentForm(forms.ModelForm):
+
+    class Meta:
+        model = Document
+        fields = ['description', 'document',]

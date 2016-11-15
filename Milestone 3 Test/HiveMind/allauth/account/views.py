@@ -725,8 +725,31 @@ class EmailVerificationSentView(TemplateView):
 email_verification_sent = EmailVerificationSentView.as_view()
 
 # Test
+# def profile(request):
+#     return render(request, 'account/account_profile.html', {'user': request.user})
+
+from .models import Document
+from .forms import DocumentForm
+from django.core.files.storage import FileSystemStorage
+from django.db.models import Q
+
 def profile(request):
-    return render(request, 'account/account_profile.html', {'user': request.user})
+    if not request.user.is_authenticated():
+        return render(request, 'account/login.html')
+    else:
+        if request.method == 'POST':
+            form = DocumentForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                form.user = request.user
+                return render(request, 'account/account_profile.html', {'form': form})
+        else:
+            form = DocumentForm()
+            documents = Document.objects.filter(user=request.user)
+            return render(request, 'account/account_profile.html', {
+                'form': form,
+                'documents': documents
+            })
 
 def myHive(request):
     return render(request, 'account/my_hive.html', {'user': request.user})
