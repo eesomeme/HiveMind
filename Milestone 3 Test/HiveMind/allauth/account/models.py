@@ -18,7 +18,6 @@ from .utils import user_email
 from .managers import EmailAddressManager, EmailConfirmationManager
 from .adapter import get_adapter
 
-
 @python_2_unicode_compatible
 class EmailAddress(models.Model):
 

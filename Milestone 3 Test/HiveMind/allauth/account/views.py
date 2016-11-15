@@ -727,3 +727,6 @@ email_verification_sent = EmailVerificationSentView.as_view()
 # Test
 def profile(request):
     return render(request, 'account/account_profile.html', {'user': request.user})
+
+def myHive(request):
+    return render(request, 'account/my_hive.html', {'user': request.user})

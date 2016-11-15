@@ -33,5 +33,6 @@ urlpatterns = [
 
     # profile
     url(r"^profile/$", views.profile, name="account_profile"),
+    url(r"^myHive/$", views.myHive, name="my_hive"),
 
 ]
