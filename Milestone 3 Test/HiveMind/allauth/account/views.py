@@ -746,12 +746,27 @@ def myHive(request):
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
     else:
+        form = HiveForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            hive = form.save(commit=False)
+            hive.user = request.user
+            hive.save()
+            hives = Hive.objects.filter(user=request.user)
+            notes_results = Notes.objects.all()
+            return render(request, 'account/my_hive.html', {
+                'hives': hives,
+                'notes': notes_results,
+                'form': form,
+            })
         hives = Hive.objects.filter(user=request.user)
-        # notes_results = Notes.objects.all()
-        return render(request, 'account/my_hive.html', {
+        notes_results = Notes.objects.all()
+        context = {
+            'form': form,
             'hives': hives,
-            # 'notes': notes_results
-        })
+            'notes': notes_results,
+        }
+        return render(request, 'account/my_hive.html', context)
+
 
 def create_hive(request):
     if not request.user.is_authenticated():
@@ -773,7 +788,7 @@ def create_hive(request):
         }
         return render(request, 'account/create_hive.html', context)
 
-def create_note(request, hive_id):
+def detail(request, hive_id):
     form = NotesForm(request.POST or None, request.FILES or None)
     hive = get_object_or_404(Hive, pk=hive_id)
     if form.is_valid():
@@ -786,19 +801,9 @@ def create_note(request, hive_id):
         user = request.user
         hive = get_object_or_404(Hive, pk=hive_id)
         notes = Notes.objects.all()
-        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, })
+        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form })
 
-    context = {
-        'hive': hive,
-        'form': form,
-    }
-    return render(request, 'account/create_note.html', context)
-
-def detail(request, hive_id):
-    if not request.user.is_authenticated():
-        return render(request, 'account/login.html')
-    else:
-        user = request.user
-        hive = get_object_or_404(Hive, pk=hive_id)
-        notes = Notes.objects.all()
-        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, })
+    user = request.user
+    hive = get_object_or_404(Hive, pk=hive_id)
+    notes = Notes.objects.all()
+    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form })

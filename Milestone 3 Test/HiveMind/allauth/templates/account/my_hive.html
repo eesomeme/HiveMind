@@ -4,15 +4,21 @@
 <h1>My Hives</h1>
 <hr></hr>
 
-<div>
+<!-- <div>
     <a class="btn btn-white" href="/accounts/create_hive"> Create a Hive</a>
-</div>
+</div> -->
 
-<br></br>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="id_course">Course:</label>
+    <input id="id_course" maxlength="500" name="course" type="text" required="">
+    <button class="btn btn-info" type="submit"> Create </button>
+</form>
+
 
     {% for hive in hives %}
     <a href="/accounts/{{ hive.id }}/">
-        <div class="btn btn-white col-sm-2">
+        <div class="btn btn-warning col-sm-2">
             {{ hive.course }}
         </div>
     </a>
