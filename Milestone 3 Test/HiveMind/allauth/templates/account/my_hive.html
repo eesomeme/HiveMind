@@ -1,28 +1,31 @@
 {% extends "layout.html" %}
+{% load static from staticfiles %}
 
 {% block content %}
+<link href="{% static 'css/myHiveStyles.css' %}" rel="stylesheet"/>
+
 <h1>My Hives</h1>
 <hr></hr>
 
-<!-- <div>
-    <a class="btn btn-white" href="/accounts/create_hive"> Create a Hive</a>
-</div> -->
+<div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="id_course">Add Course: </label>
+        <input id="id_course" maxlength="500" name="course" type="text" required="">
+        <button class="btn btn-info" type="submit"> Create </button>
+    </form>
+</div>
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label for="id_course">Course:</label>
-    <input id="id_course" maxlength="500" name="course" type="text" required="">
-    <button class="btn btn-info" type="submit"> Create </button>
-</form>
-
-
-    {% for hive in hives %}
-    <a href="/accounts/{{ hive.id }}/">
-        <div class="btn btn-warning col-sm-2">
-            {{ hive.course }}
-        </div>
-    </a>
-    {% endfor %}
-
+<!-- <div class="col-sm-12"> -->
+    <div class="row outHive col-sm-offset-2">
+        {% for hive in hives %}
+        <a href="/accounts/{{ hive.id }}/">
+            <div class="btn btn-warning col-sm-4 hives">
+                {{ hive.course }}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+<!-- </div> -->
 
 {% endblock %}

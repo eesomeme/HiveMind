@@ -680,7 +680,7 @@ password_reset_from_key_done = PasswordResetFromKeyDoneView.as_view()
 class LogoutView(TemplateResponseMixin, View):
 
     template_name = "account/logout." + app_settings.TEMPLATE_EXTENSION
-    redirect_field_name = "next"
+    redirect_field_name = "account_login"
 
     def get(self, *args, **kwargs):
         if app_settings.LOGOUT_ON_GET:
