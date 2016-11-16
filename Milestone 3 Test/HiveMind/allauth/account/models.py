@@ -179,11 +179,22 @@ class EmailConfirmationHMAC:
                                              confirmation=self,
                                              signup=signup)
 
-class Document(models.Model):
-    description = models.CharField(max_length=250, blank=True)
-    document = models.FileField()
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+from django.contrib.auth.models import Permission, User
+from django.db import models
+
+class Hive(models.Model):
     user = models.ForeignKey(User, default=1)
+    course = models.CharField(max_length=500)
 
     def __str__(self):
-        return self.description
+        return self.course
+
+
+class Notes(models.Model):
+    # user = models.ForeignKey(User, default=1)
+    hive = models.ForeignKey(Hive, on_delete=models.CASCADE)
+    notes_title = models.CharField(max_length=250)
+    notes_file = models.FileField(default='')
+
+    def __str__(self):
+        return self.notes_title

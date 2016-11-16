@@ -561,10 +561,18 @@ class UserTokenForm(forms.Form):
 
         return cleaned_data
 
-from .models import Document
+from .models import Hive, Notes
+from django import forms
+from django.contrib.auth.models import User
 
-class DocumentForm(forms.ModelForm):
+class HiveForm(forms.ModelForm):
 
     class Meta:
-        model = Document
-        fields = ['description', 'document',]
+        model = Hive
+        fields = ['course']
+
+class NotesForm(forms.ModelForm):
+
+    class Meta:
+        model = Notes
+        fields = ['notes_title', 'notes_file']

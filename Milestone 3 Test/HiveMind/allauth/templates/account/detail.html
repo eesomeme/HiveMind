@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1>{{ hive.course }}</h1>
+<hr></hr>
+
+<div class="col-sm-3">
+
+    {{ user }}
+
+
+    {% for note in notes %}
+        {% if hive.course == note.hive.course %}
+            <a href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
+        {% endif %}
+
+    {% endfor %}
+
+
+
+</div>
+
+<a href="/accounts/{{ hive.id }}/create_note">
+    <div class="btn btn-white col-sm-12">
+        <p>Add Notes</p>
+    </div>
+</a>
+
+{% endblock %}

@@ -6,24 +6,7 @@
 
 <h1>Profile</h1>
 <hr></hr>
+{{ user }}
 
-<div class="text-center">
-    <p>
-        {{ user }}
-        <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input id="id_description" name="description" type="text"> Description </input>
-        <label> Document: </label>
-        <input id="id_document" name="document" type="file" required>
-        {{ form.a_p }}
-        <button type="submit"> upload </button>
-        </form>
-
-        {{ documents.description }}
-    </p>
-
-
-
-</div>
 
 {% endblock %}

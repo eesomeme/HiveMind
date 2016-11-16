@@ -3,4 +3,20 @@
 {% block content %}
 <h1>My Hives</h1>
 <hr></hr>
+
+<div>
+    <a class="btn btn-white" href="/accounts/create_hive"> Create a Hive</a>
+</div>
+
+<br></br>
+
+    {% for hive in hives %}
+    <a href="/accounts/{{ hive.id }}/">
+        <div class="btn btn-white col-sm-2">
+            {{ hive.course }}
+        </div>
+    </a>
+    {% endfor %}
+
+
 {% endblock %}
