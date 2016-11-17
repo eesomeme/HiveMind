@@ -560,3 +560,19 @@ class UserTokenForm(forms.Form):
             raise forms.ValidationError(self.error_messages['token_invalid'])
 
         return cleaned_data
+
+from .models import Hive, Notes
+from django import forms
+from django.contrib.auth.models import User
+
+class HiveForm(forms.ModelForm):
+
+    class Meta:
+        model = Hive
+        fields = ['course']
+
+class NotesForm(forms.ModelForm):
+
+    class Meta:
+        model = Notes
+        fields = ['notes_title', 'notes_file']

@@ -30,6 +30,18 @@ from . import app_settings
 from .adapter import get_adapter
 
 
+# messing around
+from django.core.files.storage import FileSystemStorage
+from django.db.models import Q
+from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout
+from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
+from .forms import HiveForm, NotesForm
+from .models import Notes, Hive
+
+
 sensitive_post_parameters_m = method_decorator(
     sensitive_post_parameters('password', 'password1', 'password2'))
 
@@ -668,7 +680,7 @@ password_reset_from_key_done = PasswordResetFromKeyDoneView.as_view()
 class LogoutView(TemplateResponseMixin, View):
 
     template_name = "account/logout." + app_settings.TEMPLATE_EXTENSION
-    redirect_field_name = "next"
+    redirect_field_name = "account_login"
 
     def get(self, *args, **kwargs):
         if app_settings.LOGOUT_ON_GET:
@@ -724,6 +736,74 @@ class EmailVerificationSentView(TemplateView):
 
 email_verification_sent = EmailVerificationSentView.as_view()
 
+
+
 # Test
 def profile(request):
-    return render(request, 'account/account_profile.html')
+    return render(request, 'account/account_profile.html', {'user': request.user})
+
+def myHive(request):
+    if not request.user.is_authenticated():
+        return render(request, 'account/login.html')
+    else:
+        form = HiveForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            hive = form.save(commit=False)
+            hive.user = request.user
+            hive.save()
+            hives = Hive.objects.filter(user=request.user)
+            notes_results = Notes.objects.all()
+            return render(request, 'account/my_hive.html', {
+                'hives': hives,
+                'notes': notes_results,
+                'form': form,
+            })
+        hives = Hive.objects.filter(user=request.user)
+        notes_results = Notes.objects.all()
+        context = {
+            'form': form,
+            'hives': hives,
+            'notes': notes_results,
+        }
+        return render(request, 'account/my_hive.html', context)
+
+
+def create_hive(request):
+    if not request.user.is_authenticated():
+        return render(request, 'account/login.html')
+    else:
+        form = HiveForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            hive = form.save(commit=False)
+            hive.user = request.user
+            hive.save()
+            hives = Hive.objects.filter(user=request.user)
+            notes_results = Notes.objects.all()
+            return render(request, 'account/my_hive.html', {
+                'hives': hives,
+                'notes': notes_results
+            })
+        context = {
+            "form": form,
+        }
+        return render(request, 'account/create_hive.html', context)
+
+def detail(request, hive_id):
+    form = NotesForm(request.POST or None, request.FILES or None)
+    hive = get_object_or_404(Hive, pk=hive_id)
+    if form.is_valid():
+        hives_notes = hive.notes_set.all()
+        notes = form.save(commit=False)
+        notes.hive = hive
+        notes.notes_file = request.FILES['notes_file']
+        notes.save()
+
+        user = request.user
+        hive = get_object_or_404(Hive, pk=hive_id)
+        notes = Notes.objects.all()
+        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form })
+
+    user = request.user
+    hive = get_object_or_404(Hive, pk=hive_id)
+    notes = Notes.objects.all()
+    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form })

@@ -33,5 +33,10 @@ urlpatterns = [
 
     # profile
     url(r"^profile/$", views.profile, name="account_profile"),
-    url(r"^login/$", views.login, name="account_login"),
+    url(r"^myHive/$", views.myHive, name="my_hive"),
+
+    url(r'^create_hive/$', views.create_hive, name='create_hive'),
+    url(r'^(?P<hive_id>[0-9]+)/$', views.detail, name='detail'),
+    # url(r'^(?P<hive_id>[0-9]+)/create_note/$', views.create_note, name='create_note'),
+
 ]
