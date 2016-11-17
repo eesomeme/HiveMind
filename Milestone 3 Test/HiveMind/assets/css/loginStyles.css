@@ -1,0 +1,33 @@
+body {
+   background:#FAFAFA !important;
+}
+
+.vcenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.removePad {
+    padding: 0px;
+}
+
+.removeBullets {
+  list-style-type: none !important;
+}
+
+ul {
+    list-style: none;
+    padding: 0px;
+    text-align: center;;
+}
+
+li {
+    text-align: center;
+    padding-left: 20px
+}
+
+#evilLine {
+    text-decoration: none;
+}

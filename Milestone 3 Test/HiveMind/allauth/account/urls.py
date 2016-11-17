@@ -30,12 +30,13 @@ urlpatterns = [
         name="account_reset_password_from_key"),
     url(r"^password/reset/key/done/$", views.password_reset_from_key_done,
         name="account_reset_password_from_key_done"),
-<<<<<<< Updated upstream
-=======
 
     # profile
     url(r"^profile/$", views.profile, name="account_profile"),
-    url(r"^login/$", views.login, name="account_login"),
-    url(r"^profile/account_settings/$", views.account_settings, name = "account_settings"),
->>>>>>> Stashed changes
+    url(r"^myHive/$", views.myHive, name="my_hive"),
+
+    url(r'^create_hive/$', views.create_hive, name='create_hive'),
+    url(r'^(?P<hive_id>[0-9]+)/$', views.detail, name='detail'),
+    # url(r'^(?P<hive_id>[0-9]+)/create_note/$', views.create_note, name='create_note'),
+
 ]
