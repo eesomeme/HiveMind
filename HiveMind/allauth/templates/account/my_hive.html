@@ -17,9 +17,9 @@
 </div>
 
 <!-- <div class="col-sm-12"> -->
-    <div class="row outHive col-sm-offset-2">
+    <div class="row outHive col-sm-offset-2" >
         {% for hive in hives %}
-        <a href="/accounts/{{ hive.id }}/">
+        <a href="/accounts/{{ hive.id }}/" id = "hives">
             <div class="btn btn-warning col-sm-4 hives">
                 {{ hive.course }}
             </div>

@@ -33,7 +33,7 @@
 </form> -->
 
 <h3>Download Notes</h3>
-<div class="row">
+<div class="row" id = "max">
     <div class="text-center">
         {% for note in notes %}
             {% if hive.course == note.hive.course %}
@@ -65,7 +65,7 @@ var data = new FormData($('form').get(0));
 $.ajax({
     url: $(this).attr('action'),
     type: $(this).attr('method'),
-    $('#notes').load(document.URL +  ' #notes');
+
     data: data,
     cache: false,
     processData: false,
@@ -73,7 +73,7 @@ $.ajax({
 
     success: function(data) {
         alert('success');
-
+        $('#max').load(document.URL +  ' #max');
     }
 
 });
