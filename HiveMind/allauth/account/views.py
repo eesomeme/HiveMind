@@ -38,7 +38,7 @@ from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
-from .forms import HiveForm, NotesForm
+from .forms import HiveForm, NotesForm, AddForm
 from .models import Notes, Hive
 
 
@@ -740,7 +740,17 @@ email_verification_sent = EmailVerificationSentView.as_view()
 
 # Test
 def profile(request):
-    return render(request, 'account/account_profile.html', {'user': request.user})
+    if not request.user.is_authenticated():
+        return render(request, 'account/login.html')
+    else:
+
+        # bio = Bio.objects.filter(user=request.user)
+        # pic = ProfilePic.objects.filter(user = request.user)
+        # context = {
+        #     'bio': bio,
+        #     'pic': pic,
+        # }
+        return render(request, 'account/account_profile.html', {'user': request.user})
 
 def myHive(request):
     if not request.user.is_authenticated():
@@ -749,16 +759,16 @@ def myHive(request):
         form = HiveForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             hive = form.save(commit=False)
-            hive.user = request.user
             hive.save()
-            hives = Hive.objects.filter(user=request.user)
+            hive.user.add(request.user)
+            hives = request.user.member.all()
             notes_results = Notes.objects.all()
             return render(request, 'account/my_hive.html', {
                 'hives': hives,
                 'notes': notes_results,
                 'form': form,
             })
-        hives = Hive.objects.filter(user=request.user)
+        hives = request.user.member.all()
         notes_results = Notes.objects.all()
         context = {
             'form': form,
@@ -790,6 +800,8 @@ def create_hive(request):
 
 def detail(request, hive_id):
     form = NotesForm(request.POST or None, request.FILES or None)
+    # Dorm = AddForm(request.POST or None, request.FILES or None)
+
     hive = get_object_or_404(Hive, pk=hive_id)
     if form.is_valid():
         hives_notes = hive.notes_set.all()
@@ -807,3 +819,31 @@ def detail(request, hive_id):
     hive = get_object_or_404(Hive, pk=hive_id)
     notes = Notes.objects.all()
     return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form })
+
+
+
+
+
+
+
+
+
+
+
+# def profilepicupload(request):
+#     pic = picForm(request.POST or None, request.FILES or None)
+#     hive = get_object_or_404(Hive, pk=hive_id)
+#     if form.is_valid():
+#         pic = profilepics.notes_set.all()
+#         pics = form.save(commit=False)
+#         bio.user = user
+
+#
+#         user = request.user
+#
+#         return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form })
+#
+#     user = request.user
+#     bio = get_object_or_404(Bio, pk=bio_id)
+#
+#     return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form })

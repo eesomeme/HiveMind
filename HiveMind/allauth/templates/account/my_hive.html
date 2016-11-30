@@ -17,9 +17,9 @@
 </div>
 
 <!-- <div class="col-sm-12"> -->
-    <div class="row outHive col-sm-offset-2" >
+    <div class="row outHive col-sm-offset-2"  id = "hives" >
         {% for hive in hives %}
-        <a href="/accounts/{{ hive.id }}/" id = "hives">
+        <a href="/accounts/{{ hive.id }}/">
             <div class="btn btn-warning col-sm-4 hives">
                 {{ hive.course }}
             </div>
@@ -46,7 +46,7 @@ $.ajax({
     contentType: false,
 
     success: function(data) {
-        alert('success');
+      
         $('#hives').load(document.URL +  ' #hives');
     }
 

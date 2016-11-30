@@ -576,3 +576,15 @@ class NotesForm(forms.ModelForm):
     class Meta:
         model = Notes
         fields = ['notes_title', 'notes_file']
+
+class AddForm(forms.ModelForm):
+    model = Hive
+    fields = ['user']
+
+#
+# class ProfileForm(forms.ModelForm):
+#
+#     class Meta:
+#         model = ProfilePic
+
+from django.core.files.images import get_image_dimensions
