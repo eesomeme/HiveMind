@@ -3,6 +3,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+    url(r'^$', views.login, name="account_login"),
     url(r"^signup/$", views.signup, name="account_signup"),
     url(r"^login/$", views.login, name="account_login"),
     url(r"^logout/$", views.logout, name="account_logout"),
@@ -38,5 +39,6 @@ urlpatterns = [
     url(r'^create_hive/$', views.create_hive, name='create_hive'),
     url(r'^(?P<hive_id>[0-9]+)/$', views.detail, name='detail'),
     # url(r'^(?P<hive_id>[0-9]+)/create_note/$', views.create_note, name='create_note'),
+
 
 ]

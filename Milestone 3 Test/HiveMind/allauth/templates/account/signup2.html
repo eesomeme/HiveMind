@@ -1,8 +1,5 @@
 {% load static from staticfiles %}
 {% load i18n %}
-{% load account socialaccount %}
-
-{% get_providers as socialaccount_providers %}
 
 <!doctype html>
 <html lang="en">
@@ -31,62 +28,48 @@
 				<div class="col-md-6 col-sm-8 col-xs-12">
 	                <div class="card card-signup">
 
-		                    <h2 class="text-center">Login</h2>
+		                    <h2 class="text-center">Sign up</h2>
 
-							<form class="form" method="POST" action="{% url 'account_login' %}">
+							<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
 								{% csrf_token %}
-								{% include "socialaccount/snippets/login_extra.html" %}
 
 								<div class="">
 									{{ form.non_field_errors }}
 								</div>
 
+								<div class="text-center"> <p>Already have an account? Then please <a href="{{ login_url }}">sign in</a></p></div>
+
 								<div class="content">
 
 		                            <div class="input-group col-sm-offset-2 col-sm-9 col-xs-12">
-		                                <input autofocus="autofocus" id="id_login" maxlength="150" name="login" type="text" class="form-control" placeholder="Username..." required>
+		                                <input autofocus="autofocus" id="id_username" maxlength="150" minlength="1" name="login" type="text" class="form-control" placeholder="Username" required>
 		                            </div>
 
 		                            <div class="input-group col-sm-offset-2 col-sm-9 col-xs-12">
-		                                <input id="id_password" name="password" placeholder="Password..." type="password"  class="form-control" required>
+		                                <input id="id_email" name="email" placeholder="E-mail Address" type="E-mail address" type="email" class="form-control">
 		                            </div>
 
-									<div class="col-sm-offset-2 col-sm-9 col-xs-12 removePad">
+									<div class="input-group col-sm-offset-2 col-sm-9 col-xs-12">
+		                                <input id="id_password1" name="password1" placeholder="Password" type="password" class="form-control" required>
+		                            </div>
 
-										<div class="col-sm-6 removePad removeBullets">
-											<label for="id_remember">Remember Me:</label>
-											<input id="id_remember" name="remember" type="checkbox">
-										</div>
+									<div class="input-group col-sm-offset-2 col-sm-9 col-xs-12">
+		                                <input id="id_password2" name="password2" placeholder="Password (again)" type="password" class="form-control" required>
+		                            </div>
 
-										<div class="col-sm-6 removePad text-right">
-											<a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-										</div>
-
-										<br></br>
-									</div>
+									{% if redirect_field_value %}
+									<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+									{% endif %}
 
 									<div class="col-sm-offset-2 col-sm-9 col-xs-12 removePad">
 										<div class="text-center">
-											<button class="primaryAction btn btn-white" type="submit">{% trans "Login" %}</button>
-											<a class="btn btn-white" href="/accounts/signup">Register</a>
-											<br></br>
-										</div>
-									</div>
-
-									<div class="col-sm-offset-2 col-sm-9 col-xs-12 removePad">
-										<div class="text-center">
-											<a title="Facebook" id="evilLine" class="socialaccount_provider facebook" href="/accounts/facebook/login/?process=login">
-												<p>or Login with Facebook</p>
-											</a>
+											<button class="primaryAction btn btn-white" type="submit">{% trans "Sign Up" %} &raquo;</button>
 											<br></br>
 										</div>
 									</div>
 
 		                        </div>
 
-								{% if redirect_field_value %}
-								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-								{% endif %}
 
 		                    </form>
 		            </div>
