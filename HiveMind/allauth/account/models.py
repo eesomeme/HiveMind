@@ -235,6 +235,13 @@ class Bio(models.Model):
     def __str__(self):
         return self.user
 
+class profilepic(models.Model):
+    user = models.ForeignKey(User, default = 1)
+    image = models.ImageField(default = '')
+
+    def __str__(self):
+        return self.user
+
 
 # class HiveInfo(models.Model):
 #     Hive = models.ForeignKey(Hive, default = 1)

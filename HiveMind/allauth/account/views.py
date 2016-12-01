@@ -38,8 +38,9 @@ from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
-from .forms import HiveForm, NotesForm, AddForm
-from .models import Notes, Hive
+from .forms import HiveForm, NotesForm, AddForm, RemoveForm, DeleteForm, BioForm
+from .models import Notes, Hive, profilepic, Bio, ProfileNotes
+from django.contrib.auth.models import User
 
 
 sensitive_post_parameters_m = method_decorator(
@@ -739,18 +740,48 @@ email_verification_sent = EmailVerificationSentView.as_view()
 
 
 # Test
-def profile(request):
+def profiles(request, username):
+    u = User.objects.get(username = username)
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
     else:
+        form = BioForm(request.POST or None)
+        if form.is_valid():
+            bio = form.save(commit = False)
+            bio.user = request.User
+            bio.save()
+            bio = Bio.objects.filter(user=request.user)
 
-        # bio = Bio.objects.filter(user=request.user)
+            return render(request, 'account/otherprofiles.html', {'user': request.user, 'bio': bio,})
+
         # pic = ProfilePic.objects.filter(user = request.user)
         # context = {
         #     'bio': bio,
         #     'pic': pic,
         # }
-        return render(request, 'account/account_profile.html', {'user': request.user})
+
+        return render(request, 'account/otherprofiles.html', {'user': username, 'u': u})
+
+def profile(request):
+    if not request.user.is_authenticated():
+        return render(request, 'account/login.html')
+    else:
+        form = BioForm(request.POST or None)
+        if form.is_valid():
+            bio = form.save(commit = False)
+            bio.user = request.User
+            bio.save()
+            bio = Bio.objects.filter(user=request.user)
+
+            return render(request, 'account/account_profile.html', {'user': request.user, 'bio': bio,})
+
+        # pic = ProfilePic.objects.filter(user = request.user)
+        # context = {
+        #     'bio': bio,
+        #     'pic': pic,
+        # }
+
+        return render(request, 'account/account_profile.html', {'user': request.user, })
 
 def myHive(request):
     if not request.user.is_authenticated():
@@ -800,7 +831,9 @@ def create_hive(request):
 
 def detail(request, hive_id):
     form = NotesForm(request.POST or None, request.FILES or None)
-    # Dorm = AddForm(request.POST or None, request.FILES or None)
+    Dorm = AddForm()
+    Remove = RemoveForm()
+    Del = DeleteForm()
 
     hive = get_object_or_404(Hive, pk=hive_id)
     if form.is_valid():
@@ -813,12 +846,75 @@ def detail(request, hive_id):
         user = request.user
         hive = get_object_or_404(Hive, pk=hive_id)
         notes = Notes.objects.all()
-        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form })
+        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove})
+    # else:
+    #     if Dorm.is_valid():
+    #         zeta = Dorm.save(commit = False)
+    #
+    #         hive.user.add(zeta)
+    #         hive.save()
+    #         user = request.user
+    #         hive = get_object_or_404(Hive, pk=hive_id)
+    #         notes = Notes.objects.all()
+    #         return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm})
+
+
+
+    if request.method == "POST":
+        if 'add' in request.POST:
+            Dorm = AddForm(request.POST or None)
+            if Dorm.is_valid():
+
+                m = Dorm.cleaned_data['a']
+
+                print "'yee'"
+
+                r = User.objects.filter(username = m )
+                print r.first
+                hive.user.add(r.first())
+                user = request.user
+                hive = get_object_or_404(Hive, pk=hive_id)
+                notes = Notes.objects.all()
+                return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove})
+        else:
+            Remove = RemoveForm(request.POST or None)
+            if Remove.is_valid():
+
+                x = Remove.cleaned_data['a']
+                z = User.objects.filter(username = x)
+                hive.user.remove(z.first())
+                user = request.user
+                hive = get_object_or_404(Hive, pk=hive_id)
+                notes = Notes.objects.all()
+                return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove})
+
+
+
+
+
+
+    # if Dorm.is_valid():
+    #     Dorm = AddForm(request.POST or None)
+    #     m = Dorm.cleaned_data['a']
+    #
+    #     print "'yee'"
+    #
+    #     print x
+    #     r = User.objects.filter(username = m )
+    #     print r.first
+    #     hive.user.add(r.first())
+    #     user = request.user
+    #     hive = get_object_or_404(Hive, pk=hive_id)
+    #     notes = Notes.objects.all()
+    #     return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove})
+    #
+
 
     user = request.user
     hive = get_object_or_404(Hive, pk=hive_id)
     notes = Notes.objects.all()
-    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form })
+
+    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove})
 
 
 
