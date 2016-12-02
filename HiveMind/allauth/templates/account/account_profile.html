@@ -11,16 +11,45 @@
 <form method="POST" enctype="multipart/form-data" action = "">
     {% csrf_token %}
 
-    <div class="" id = "Bio">
-        <div>
-            <label for="id_bio">Your Bio:</label>
-              {{ bio }}
-        </div>
+    <div class="" id = "BioUpdate">
+
+        {{bioform}}
 
     </div>
     <button class="btn btn-info" id="Add" type="submit"> add </button>
+
 </form>
 
+<div>
+    <label for="id_bio">Your Bio:</label>
+      {{ bio }}
+</div>
+
+
+
+<form method="POST" enctype="multipart/form-data" action = "">
+    {% csrf_token %}
+
+    <div class="" id = "AddPages">
+
+        {{uploader}}
+
+    </div>
+    <button class="btn btn-info" id="Add" type="submit"> add </button>
+
+</form>
+
+<h3>Download Notes</h3>
+<div class="row" id = "max">
+    <div class="text-center">
+        {% for note in portfolio %}
+            {% if user == note.user %}
+
+                <a class="btn btn-warning" href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
 
 
 

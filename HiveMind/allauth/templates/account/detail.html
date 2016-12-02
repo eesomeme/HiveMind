@@ -14,6 +14,7 @@
             <label for="id_notes_title">Notes title:</label>
             <div>
                 <input id="id_notes_title" maxlength="250" name="notes_title" type="text" required="">
+                <button class="btn btn-info" id="fileSubmit" type="submit"> upload </button>
             </div>
         </div>
         <div class="col-sm-offset-5">
@@ -21,7 +22,7 @@
         </div>
 
     </div>
-    <button class="btn btn-info" id="fileSubmit" type="submit"> upload </button>
+
 </form>
 
 
@@ -33,13 +34,15 @@
             <label for="id_username" name = "add">Add Users:</label>
 
 
-              <input id="your_name" type="text" name="add" {{ dorm }}>
+              {{dorm}}
+
+              <button class="btn btn-info" id="add" name = "add" type="submit"> Add User </button>
 
 
         </div>
 
     </div>
-    <button class="btn btn-info" id="Add" type="submit"> add </button>
+
 </form>
 
 <form method="POST" enctype="multipart/form-data" action = "">
@@ -47,12 +50,13 @@
 
     <div class="" id = "remove">
         <div>
-            <label for="id_username">Kill Users:</label>
+            <label for="id_username">Remove Users:</label>
               {{ remove }}
+                <button class="btn btn-info" id="remover" type="submit" name = "remove"> Remove User </button>
         </div>
 
     </div>
-    <button class="btn btn-info" id="remover" type="submit"> Kill </button>
+
 </form>
 
 

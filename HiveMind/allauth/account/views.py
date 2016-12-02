@@ -38,7 +38,7 @@ from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
-from .forms import HiveForm, NotesForm, AddForm, RemoveForm, DeleteForm, BioForm
+from .forms import HiveForm, NotesForm, AddForm, RemoveForm, DeleteForm, BioForm, ProfileNotesForm
 from .models import Notes, Hive, profilepic, Bio, ProfileNotes
 from django.contrib.auth.models import User
 
@@ -744,15 +744,22 @@ def profiles(request, username):
     u = User.objects.get(username = username)
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
+    # else:
+    #     form = BioForm(request.POST or None)
+    #     if form.is_valid():
+    #         bio = form.save(commit = False)
+    #         bio.user = request.User
+    #         bio.save()
+    #         bio = Bio.objects.filter(user=request.user)
+    #
+    #         return render(request, 'account/otherprofiles.html', {'user': request.user, 'bio': bio,})
+    socks = User.objects.filter(username = username)
+    top = socks.first()
+    biop = Bio.objects.filter(user=top)
+    if not biop:
+        profiledat = "Nothing Here!"
     else:
-        form = BioForm(request.POST or None)
-        if form.is_valid():
-            bio = form.save(commit = False)
-            bio.user = request.User
-            bio.save()
-            bio = Bio.objects.filter(user=request.user)
-
-            return render(request, 'account/otherprofiles.html', {'user': request.user, 'bio': bio,})
+        profiledat = biop.first().about
 
         # pic = ProfilePic.objects.filter(user = request.user)
         # context = {
@@ -760,28 +767,56 @@ def profiles(request, username):
         #     'pic': pic,
         # }
 
-        return render(request, 'account/otherprofiles.html', {'user': username, 'u': u})
+    user_notes = ProfileNotes.objects.all()
+
+    return render(request, 'account/otherprofiles.html', {'user': username, 'u': u, 'bio': profiledat, 'portfolio': user_notes })
 
 def profile(request):
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
     else:
         form = BioForm(request.POST or None)
+        NotesForm = ProfileNotesForm(request.POST or None, request.FILES or None)
         if form.is_valid():
-            bio = form.save(commit = False)
-            bio.user = request.User
-            bio.save()
-            bio = Bio.objects.filter(user=request.user)
+            z = Bio.objects.filter(user=request.user).delete()
 
-            return render(request, 'account/account_profile.html', {'user': request.user, 'bio': bio,})
+            bio = form.save(commit = False)
+            bio.user = request.user
+            bio.save()
+
+            biop = Bio.objects.filter(user=request.user)
+            profiledat = biop.first()
+            user_notes = ProfileNotes.objects.all()
+
+            return render(request, 'account/account_profile.html', {'user': request.user, 'bio': profiledat.about, 'bioform' : form, 'uploader' : NotesForm, 'portfolio': user_notes})
+
+        if NotesForm.is_valid():
+
+            notes = NotesForm.save(commit = False)
+            notes.user = request.user
+            notes.notes_file = request.FILES['notes_file']
+            notes.save()
+            user_notes = ProfileNotes.objects.all()
+            biop = Bio.objects.filter(user=request.user)
+            profiledat = biop.first()
+            user_notes = ProfileNotes.objects.all()
+
+            return render(request, 'account/account_profile.html', {'user': request.user, 'bio': profiledat.about, 'bioform' : form, 'uploader' : NotesForm, 'portfolio': user_notes})
 
         # pic = ProfilePic.objects.filter(user = request.user)
         # context = {
         #     'bio': bio,
         #     'pic': pic,
         # }
+        biop = Bio.objects.filter(user=request.user)
+        if not biop:
+            profiledat = "Add A Bio!"
+        else:
+            profiledat = biop.first().about
 
-        return render(request, 'account/account_profile.html', {'user': request.user, })
+        user_notes = ProfileNotes.objects.all()
+
+        return render(request, 'account/account_profile.html', {'user': request.user, 'bio': profiledat, 'bioform' : form, 'uploader' : NotesForm, 'portfolio': user_notes})
 
 def myHive(request):
     if not request.user.is_authenticated():

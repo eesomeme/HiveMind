@@ -16,7 +16,17 @@
 
     </div>
 
+    <h3>Download Notes</h3>
+    <div class="row" id = "max">
+        <div class="text-center">
+            {% for note in portfolio %}
+                {% if u == note.user %}
 
+                    <a class="btn btn-warning" href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 
 
 
