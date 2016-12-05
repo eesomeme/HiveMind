@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% load static from staticfiles %}
+
+{% block content %}
+<link href="{% static 'css/myHiveStyles.css' %}" rel="stylesheet"/>
+
+<h1>My Hives</h1>
+<hr></hr>
+
+<div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="id_course">Add Course: </label>
+        <input id="id_course" maxlength="500" name="course" type="text" required="">
+        <button class="btn btn-info" type="submit"> Create </button>
+    </form>
+</div>
+
+<!-- <div class="col-sm-12"> -->
+    <div class="row outHive col-sm-offset-2"  id = "hives" >
+        {% for hive in hives %}
+        <a href="/accounts/{{ hive.id }}/">
+            <div class="btn btn-warning col-sm-4 hives">
+                {{ hive.course }}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+<!-- </div> -->
+
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+
+
+function add(event) {
+event.preventDefault();
+var data = new FormData($('form').get(0));
+
+$.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+
+    data: data,
+    cache: false,
+    processData: false,
+    contentType: false,
+
+    success: function(data) {
+      
+        $('#hives').load(document.URL +  ' #hives');
+    }
+
+});
+return false;
+}
+
+$(function() {
+    $('form').submit(add);
+
+});
+
+
+
+</script>
+
+
+
+
+{% endblock %}
