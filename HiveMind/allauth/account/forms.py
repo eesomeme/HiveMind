@@ -561,7 +561,7 @@ class UserTokenForm(forms.Form):
 
         return cleaned_data
 
-from .models import Hive, Notes, ProfileNotes, Bio, profilepic
+from .models import Hive, Notes, ProfileNotes, Bio, profilepic,University
 from django import forms
 from django.contrib.auth.models import User
 
@@ -583,11 +583,19 @@ class AddForm(forms.Form):
 
 class DeleteForm(forms.Form):
 
-    a = forms.CharField(max_length=250)
+    notes_title = forms.CharField(max_length=250)
+
 
 class RemoveForm(forms.Form):
 
     a = forms.CharField(max_length=250, required = True)
+
+class SearchUserForm(forms.Form):
+    username = forms.CharField(max_length=250)
+
+class SearchUniversityForm(forms.Form):
+    university = forms.CharField(max_length=900)
+
 
 class ProfileNotesForm(forms.ModelForm):
 
@@ -606,6 +614,13 @@ class PicForm(forms.ModelForm):
     class Meta:
         model = profilepic
         fields = ['image']
+
+class SchoolForm(forms.ModelForm):  #form for adding the school you go to.
+    class Meta:
+        model = University
+        fields = ['school']
+
+
 #
 # class ProfileForm(forms.ModelForm):
 #

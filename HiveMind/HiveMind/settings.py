@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
 ]
 
+APP_PATH = os.path.dirname(os.path.abspath(__file__))
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

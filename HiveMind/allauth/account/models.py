@@ -185,6 +185,7 @@ from django.db import models
 class Hive(models.Model):
     user = models.ManyToManyField(User, related_name = "member")
     course = models.CharField(max_length=500)
+    # notes = models.ManyToManyField(Notes, related_name = "notebooks")
     #Hivepk = models.IntegerField(random)
     #auto_increment_id = models.AutoField(primary_key=True
     #primary_keyid = models.AutoField(primary_key=True)
@@ -205,6 +206,16 @@ class Hive(models.Model):
 class Notes(models.Model):
     # user = models.ForeignKey(User, default=1)
     hive = models.ForeignKey(Hive, on_delete=models.CASCADE)
+    hivepk = models.IntegerField(default = 0)
+    notes_title = models.CharField(max_length=250)
+    notes_file = models.FileField(default='')
+
+    def __str__(self):
+        return self.notes_title
+
+class NoteX(models.Model):
+    hive = models.ForeignKey(Hive, on_delete=models.CASCADE)
+    hivepk = models.IntegerField(default = 0)
     notes_title = models.CharField(max_length=250)
     notes_file = models.FileField(default='')
 
@@ -241,6 +252,13 @@ class profilepic(models.Model):
 
     def __str__(self):
         return self.user
+
+class University(models.Model):
+    school = models.CharField(max_length = 900)
+    students = models.ManyToManyField(User, related_name = "studentof")
+
+    def __str__(self):
+        return self.school
 
 
 # class HiveInfo(models.Model):

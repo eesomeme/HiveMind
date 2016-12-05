@@ -3,32 +3,59 @@
 {% block head_title %}Hive Profile{% endblock %}
 
 {% block content %}
-
-<h1>Profile</h1>
-<hr></hr>
-{{ user }}
+<div class = "User" id = "profile_top" >
+  <h1 align = "left" id = "username" name = "Head">{{user}}</h1>
+  <hr></hr>
+</div>
 
     <div class="" id = "Bio">
         <div>
-            <label for="id_bio">Their Bio:</label>
+          <h2>
+            <u>About Me</u>
+          </h2>
+            <h3>
               {{ bio }}
+            </h3>
         </div>
 
     </div>
 
-    <h3>Download Notes</h3>
-    <div class="row" id = "max">
-        <div class="text-center">
-            {% for note in portfolio %}
-                {% if u == note.user %}
-
-                    <a class="btn btn-warning" href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
 
 
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalHorizontal">
+        My Notes
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModalHorizontal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close"
+                       data-dismiss="modal">
+                           <span aria-hidden="true">&times;</span>
+                           <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        {{user}}'s Notes
+                    </h4>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                      <div class="text-center">
+                          {% for note in portfolio %}
+                              {% if u == note.user %}
+
+                                  <a class="btn btn-warning" href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
+                              {% endif %}
+                          {% endfor %}
+                      </div>
+                  </div>
+
+                  </div>
 
 
 

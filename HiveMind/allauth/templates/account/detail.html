@@ -6,8 +6,89 @@
 <h1>{{ hive.course }}</h1>
 <hr></hr>
 
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalHorizontal">
+    Notes
+</button>
 
-<form method="POST" enctype="multipart/form-data">
+<!-- Modal -->
+<div class="modal fade" id="myModalHorizontal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    {{hive.course}}'s Notes
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+              <div class="row" id = "max">
+                  <div class="text-center">
+                      {% for note in notes %}
+                          {% if hive.pk == note.hivepk %}
+
+                              <a class="btn btn-warning" href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
+                          {% endif %}
+                      {% endfor %}
+                  </div>
+
+                  <div class="row" id = "red">
+                      <div class="text-center">
+
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="" id = "notes">
+                                <div>
+                                    <label for="id_notes_title">Notes title:</label>
+                                    <div>
+                                        <input id="id_notes_title" maxlength="250" name="notes_title" type="text" required="">
+                                        <button class="btn btn-info" id="fileSubmit" type="submit"> upload </button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-offset-5">
+                                    <input class="" id="id_notes_file" name="notes_file" type="file" required="">
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                        <form method="POST" enctype="multipart/form-data" action = "">
+                            {% csrf_token %}
+
+                            <div class="" id = "delete">
+                                <div>
+                                    <label for="id_username">Remove File:</label>
+                                      {{ delete }}
+                                        <button class="btn btn-info" id="delete" type="submit" name = "delete">delete </button>
+                                </div>
+
+                            </div>
+
+                        </form>
+
+              </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+<!-- <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="" id = "notes">
         <div>
@@ -23,42 +104,24 @@
 
     </div>
 
-</form>
+</form> -->
 
 
+
+<!--
 <form method="POST" enctype="multipart/form-data" action = "">
     {% csrf_token %}
 
-    <div class="" id = "add">
+    <div class="" id = "delete">
         <div>
-            <label for="id_username" name = "add">Add Users:</label>
-
-
-              {{dorm}}
-
-              <button class="btn btn-info" id="add" name = "add" type="submit"> Add User </button>
-
-
+            <label for="id_username">Remove File:</label>
+              {{ delete }}
+                <button class="btn btn-info" id="delete" type="submit" name = "delete">delete </button>
         </div>
 
     </div>
 
-</form>
-
-<form method="POST" enctype="multipart/form-data" action = "">
-    {% csrf_token %}
-
-    <div class="" id = "remove">
-        <div>
-            <label for="id_username">Remove Users:</label>
-              {{ remove }}
-                <button class="btn btn-info" id="remover" type="submit" name = "remove"> Remove User </button>
-        </div>
-
-    </div>
-
-</form>
-
+</form> -->
 
 
 <!-- <form method="POST" id="post-form">
@@ -67,17 +130,84 @@
     <button class="btn btn-info" type="submit"> Post </button>
 </form> -->
 
-<h3>Download Notes</h3>
-<div class="row" id = "max">
-    <div class="text-center">
-        {% for note in notes %}
-            {% if hive.course == note.hive.course %}
 
-                <a class="btn btn-warning" href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
-            {% endif %}
-        {% endfor %}
-    </div>
-</div>
+
+
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalusers">
+    Our Members
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="modalusers" tabindex="-1" role="dialog"
+     aria-labelledby="myModalusers" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                  Our Members
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+              <div class="row" id = "max">
+                  <div class="text-center">
+                      {% for person in persons %}
+
+
+                              <a class="btn btn-warning" href=/accounts/profile/{{person.username}}> <p> {{ person.username}}</p></a>
+
+                      {% endfor %}
+
+                      <form method="POST" enctype="multipart/form-data" action = "">
+                          {% csrf_token %}
+
+                          <div class="" id = "add">
+                              <div>
+                                  <label for="id_username" name = "add">Add Users:</label>
+
+
+                                    {{dorm}}
+
+                                    <button class="btn btn-info" id="add" name = "add" type="submit"> Add User </button>
+
+
+                              </div>
+
+                          </div>
+
+                      </form>
+
+                      <form method="POST" enctype="multipart/form-data" action = "">
+                          {% csrf_token %}
+
+                          <div class="" id = "remove">
+                              <div>
+                                  <label for="id_username">Remove Users:</label>
+                                    {{ remove }}
+                                      <button class="btn btn-info" id="remove" type="submit" name = "remove"> Remove User </button>
+                              </div>
+
+                          </div>
+
+                      </form>
+                  </div>
+
+
+
+
+
+              </div>
+
+              </div>
+
+
 
 
 
@@ -156,5 +286,5 @@
 //       });
 //   }
 // });
-</script> -->
+</script>
 {% endblock %}

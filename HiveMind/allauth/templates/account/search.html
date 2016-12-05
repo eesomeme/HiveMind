@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% load static from staticfiles %}
+
+{% block content %}
+
+<h1> Search Users</h1>
+
+<form method="POST" enctype="multipart/form-data" action = "">
+    {% csrf_token %}
+
+    <div class="" id = "User">
+        <div>
+            <label for="id_username" name = "add">Username:</label>
+
+
+              {{userbox}}
+
+
+
+
+
+        </div>
+
+    </div>
+
+    <div class="" id = "School">
+        <div>
+            <label for="id_username" name = "add">University:</label>
+
+
+              {{uniBox}}
+
+
+
+
+        </div>
+
+    </div>
+
+
+  <button class="btn btn-info" id="add" name = "add" type="submit">  </button>
+
+
+
+
+</form>
+{% endblock %}

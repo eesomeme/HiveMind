@@ -38,7 +38,7 @@ from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
-from .forms import HiveForm, NotesForm, AddForm, RemoveForm, DeleteForm, BioForm, ProfileNotesForm
+from .forms import HiveForm, NotesForm, AddForm, RemoveForm, DeleteForm, BioForm, ProfileNotesForm, SearchUserForm, SearchUniversityForm
 from .models import Notes, Hive, profilepic, Bio, ProfileNotes
 from django.contrib.auth.models import User
 
@@ -744,15 +744,7 @@ def profiles(request, username):
     u = User.objects.get(username = username)
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
-    # else:
-    #     form = BioForm(request.POST or None)
-    #     if form.is_valid():
-    #         bio = form.save(commit = False)
-    #         bio.user = request.User
-    #         bio.save()
-    #         bio = Bio.objects.filter(user=request.user)
-    #
-    #         return render(request, 'account/otherprofiles.html', {'user': request.user, 'bio': bio,})
+
     socks = User.objects.filter(username = username)
     top = socks.first()
     biop = Bio.objects.filter(user=top)
@@ -862,36 +854,35 @@ def create_hive(request):
         context = {
             "form": form,
         }
-        return render(request, 'account/create_hive.html', context)
+        return redirect(request, 'account/create_hive.html', context)
 
 def detail(request, hive_id):
+
+
     form = NotesForm(request.POST or None, request.FILES or None)
     Dorm = AddForm()
     Remove = RemoveForm()
     Del = DeleteForm()
 
     hive = get_object_or_404(Hive, pk=hive_id)
-    if form.is_valid():
+    persons = hive.user.all()
+    if not Hive.objects.filter(pk = hive_id, user = request.user):
+        return redirect('/accounts/profile')
+
+
+    if form.is_valid():                             #Add Notes to the Hive
         hives_notes = hive.notes_set.all()
         notes = form.save(commit=False)
         notes.hive = hive
+        notes.hivepk = int(hive_id)
+
         notes.notes_file = request.FILES['notes_file']
         notes.save()
 
         user = request.user
-        hive = get_object_or_404(Hive, pk=hive_id)
+        hive = get_object_or_404(Hive,pk = hive_id)
         notes = Notes.objects.all()
-        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove})
-    # else:
-    #     if Dorm.is_valid():
-    #         zeta = Dorm.save(commit = False)
-    #
-    #         hive.user.add(zeta)
-    #         hive.save()
-    #         user = request.user
-    #         hive = get_object_or_404(Hive, pk=hive_id)
-    #         notes = Notes.objects.all()
-    #         return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm})
+        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons})
 
 
 
@@ -900,64 +891,101 @@ def detail(request, hive_id):
             Dorm = AddForm(request.POST or None)
             if Dorm.is_valid():
 
-                m = Dorm.cleaned_data['a']
+                added_user = Dorm.cleaned_data['a']
 
                 print "'yee'"
 
-                r = User.objects.filter(username = m )
-                print r.first
-                hive.user.add(r.first())
+                exist = User.objects.filter(username = added_user)
+
+                hive.user.add(exist.first())
                 user = request.user
                 hive = get_object_or_404(Hive, pk=hive_id)
                 notes = Notes.objects.all()
-                return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove})
+                return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons})
         else:
-            Remove = RemoveForm(request.POST or None)
-            if Remove.is_valid():
+            if 'remove' in request.POST:
+                Remove = RemoveForm(request.POST or None)
+                if Remove.is_valid():
 
-                x = Remove.cleaned_data['a']
-                z = User.objects.filter(username = x)
-                hive.user.remove(z.first())
+                    removeduser = Remove.cleaned_data['a']
+                    exitR = User.objects.filter(username = removeduser)
+
+                    hive.user.remove(exitR.first())
+                    user = request.user
+                    hive = get_object_or_404(Hive, pk=hive_id)
+                    notes = Notes.objects.all()
+                    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons})
+
+        if 'delete' in request.POST:
+            Del = DeleteForm(request.POST or None)
+            if Del.is_valid():                             #Remove Notes
+
+                notes = Del.cleaned_data['notes_title']
+                hivepk1 = int(hive_id)
+                print notes
+                Notes.objects.filter(notes_title = notes, hivepk = hivepk1).delete()
+
                 user = request.user
-                hive = get_object_or_404(Hive, pk=hive_id)
+                hive = get_object_or_404(Hive,pk = hive_id)
                 notes = Notes.objects.all()
-                return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove})
+                return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons})
+            # else:
 
 
 
 
 
 
-    # if Dorm.is_valid():
-    #     Dorm = AddForm(request.POST or None)
-    #     m = Dorm.cleaned_data['a']
-    #
-    #     print "'yee'"
-    #
-    #     print x
-    #     r = User.objects.filter(username = m )
-    #     print r.first
-    #     hive.user.add(r.first())
-    #     user = request.user
-    #     hive = get_object_or_404(Hive, pk=hive_id)
-    #     notes = Notes.objects.all()
-    #     return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove})
-    #
 
 
     user = request.user
     hive = get_object_or_404(Hive, pk=hive_id)
     notes = Notes.objects.all()
 
-    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove})
+    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete': Del, 'persons' : persons})
 
 
 
 
 
 
+def DeleteUser(request):
+    if not request.user.is_authenticated():
+        return render(request, 'account/login.html')
 
+    x = User.objects.get(username = request.user.username)
+    x.delete()
+    return render(request, 'account/login.html')
 
+def SearchUserbase(request):
+    if not request.user.is_authenticated():
+        return render(request, 'account/login.html')
+    userS = SearchUserForm()
+    universityS = SearchUniversityForm()
+
+    if request.method == "POST":
+        userS = UserSearchForm(request.POST or None)
+        user = userS.cleaned_data['username']
+        userlist = User.objects.filter(username = user)
+        univeristyS = SearchUniversityForm(request.POST or None)
+        university = univeristyS.cleaned_data['university']
+        uniList = University.objects.filter(school = university)
+        x = User.objects.studentof(uniList.first())
+
+        if not userList:
+            if uniList:
+                peeps = 1
+                return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS,'university': uniList.first(), 'peeps': peeps, 'thepeople': x})
+        else:
+            if not uniList:
+                peeps = 2
+                return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS,'users': userList.first(),'peeps': peeps, 'thepeople': x})
+            else:
+                peeps = 3
+                return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS, 'university': uniList.first(), 'user': userList.first(), 'peeps': peeps, 'thepeople': x})
+
+    peeps = 0
+    return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS, 'peeps': peeps,})
 
 
 
