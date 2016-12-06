@@ -1,0 +1,325 @@
+{% extends "layout.html" %}
+{% load static from staticfiles %}
+
+{% block content %}
+
+<h1>{{ hive.course }}</h1>
+<hr></hr>
+
+<h2>
+
+  {% if proper == 1 %}
+    <b> <i>Sorry</i> </b>, looks like you either tried to <b>add a user</b> already in {{hive.course}}
+  {%endif%}
+
+  {% if proper == 2 %}
+      <b><i>Whoops</i></b>, looks like you either tried to remove a <b>user NOT</b> already in {{hive.course}}
+  {%endif%}
+
+  {% if proper == 3 %}
+      <b><i>Yikes</i></b>, looks like you either tried to delete a <b>file NOT</b> already in {{hive.course}}
+  {%endif%}
+
+  {% if proper == 4 %}
+      <b><i>OH NO!</i></b>, That user <b>DOES NOT</b> exist in HiveMind #SpreadTheWordTho
+  {%endif%}
+
+
+
+
+
+
+</h2>
+
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalHorizontal">
+    Notes
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="myModalHorizontal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    {{hive.course}}'s Notes
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+              <div class="row" id = "max">
+                  <div class="text-center">
+                      {% for note in notes %}
+                          {% if hive.pk == note.hivepk %}
+
+                              <a class="btn btn-warning" href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
+                          {% endif %}
+                      {% endfor %}
+                  </div>
+
+                  <div class="row" id = "red">
+                      <div class="text-center">
+
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="" id = "notes">
+                                <div>
+                                    <label for="id_notes_title">Notes title:</label>
+                                    <div>
+                                        <input id="id_notes_title" maxlength="250" name="notes_title" type="text" required="">
+                                        <button class="btn btn-info" id="fileSubmit" type="submit"> upload </button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-offset-5">
+                                    <input class="" id="id_notes_file" name="notes_file" type="file" required="">
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                        <form method="POST" enctype="multipart/form-data" action = "">
+                            {% csrf_token %}
+
+                            <div class="" id = "delete">
+                                <div>
+                                    <label for="id_username">Remove File:</label>
+                                      {{ delete }}
+                                        <button class="btn btn-info" id="delete" type="submit" name = "delete">delete </button>
+                                </div>
+
+                            </div>
+
+                        </form>
+
+              </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+<!-- <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="" id = "notes">
+        <div>
+            <label for="id_notes_title">Notes title:</label>
+            <div>
+                <input id="id_notes_title" maxlength="250" name="notes_title" type="text" required="">
+                <button class="btn btn-info" id="fileSubmit" type="submit"> upload </button>
+            </div>
+        </div>
+        <div class="col-sm-offset-5">
+            <input class="" id="id_notes_file" name="notes_file" type="file" required="">
+        </div>
+
+    </div>
+
+</form> -->
+
+
+
+<!--
+<form method="POST" enctype="multipart/form-data" action = "">
+    {% csrf_token %}
+
+    <div class="" id = "delete">
+        <div>
+            <label for="id_username">Remove File:</label>
+              {{ delete }}
+                <button class="btn btn-info" id="delete" type="submit" name = "delete">delete </button>
+        </div>
+
+    </div>
+
+</form> -->
+
+
+<!-- <form method="POST" id="post-form">
+    {% csrf_token %}
+    <input id="" maxlength="250" name="post" type="text" required="">
+    <button class="btn btn-info" type="submit"> Post </button>
+</form> -->
+
+
+
+
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalusers">
+    Our Members
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="modalusers" tabindex="-1" role="dialog"
+     aria-labelledby="myModalusers" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                   data-dismiss="modal">
+                       <span aria-hidden="true">&times;</span>
+                       <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                  Our Members
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+              <div class="row" id = "max">
+                  <div class="text-center">
+                      {% for person in persons %}
+
+
+                              <a class="btn btn-warning" href=/accounts/profile/{{person.username}}> <p> {{ person.username}}</p></a>
+
+                      {% endfor %}
+
+                      <form method="POST" enctype="multipart/form-data" action = "">
+                          {% csrf_token %}
+
+                          <div class="" id = "add">
+                              <div>
+                                  <label for="id_username" name = "add">Add Users:</label>
+
+
+                                    {{dorm}}
+
+                                    <button class="btn btn-info" id="add" name = "add" type="submit"> Add User </button>
+
+
+                              </div>
+
+                          </div>
+
+                      </form>
+
+                      <form method="POST" enctype="multipart/form-data" action = "">
+                          {% csrf_token %}
+
+                          <div class="" id = "remove">
+                              <div>
+                                  <label for="id_username">Remove Users:</label>
+                                    {{ remove }}
+                                      <button class="btn btn-info" id="remove" type="submit" name = "remove"> Remove User </button>
+                              </div>
+
+                          </div>
+
+                      </form>
+                  </div>
+
+
+
+
+
+              </div>
+
+              </div>
+            </div>
+          </div>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <h4>Messages<h4>
+  <div class"">
+    <div>
+      <input id="id_notes_title" maxlength="250" name="notes_title" type="text" required="">
+    </div>
+  </div> -->
+
+<script src="{% static 'js/main.js' %}"></script>
+ <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+
+
+// function upload(event) {
+// event.preventDefault();
+// var data = new FormData($('form').get(0));
+// var add = new FormData($('dorm').get(0));
+// var remove = new FormData($('remove').get(0));
+// $.ajax({
+//     url: $(this).attr('action'),
+//     type: $(this).attr('method'),
+//
+//     data: data,
+//     add: add,
+//     remove: remove,
+//     cache: false,
+//     processData: false,
+//     contentType: false,
+//
+//     success: function(data,add,remove) {
+//         alert('success');
+//         $('#max').load(document.URL +  ' #max');
+//     }
+//
+// });
+// return false;
+// }
+//
+// $(function() {
+//     $('form').submit(upload);
+//     $('remove').submit(upload);
+//     $('dorm').submit(upload);
+//
+// });
+
+
+
+
+
+
+
+
+
+// $(function() {
+//   var el = document.getElementById("fileSubmit");
+// 	if (el.addEventListener)
+// 	 el.addEventListener("click", doUpload, false);
+//   console.log("Test");
+//
+//   function doUpload() {
+//         var dataObject = {
+// 					filename : "test.txt",
+// 				};
+//
+// 				$.ajax({
+// 					url: 'scriptToRun.py',
+// 					type: 'POST',
+// 					data: dataObject,
+//
+// 					// Do indented code if it worked
+// 					success: function(output) {
+//             console.log("it worked")
+//           }
+//       });
+//   }
+// });
+</script>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% load static from staticfiles %}
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<title>HiveMind</title>
+
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+
+	<!--     Fonts and icons     -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+
+	<!-- CSS Files -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/material-kit.css' %}" rel="stylesheet"/>
+	<link href="{% static 'css/styler.css' %}" rel="stylesheet"/>
+
+</head>
+
+<body class="home">
+
+<!-- Navbar will come here -->
+<nav class="navbar navbar-warning" role="navigation">
+	<div class="container-fluid">
+    	<div class="navbar-header">
+    		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+    		</button>
+    		<a class="navbar-brand" href="/accounts/myHive">HiveMind</a>
+    	</div>
+
+    	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    		<ul class="nav navbar-nav navbar-right">
+				<li class="active"><a href="/accounts/myHive">My Hives</a></li>
+        		<li class="dropdown">
+        			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
+                    {% if request.user.is_authenticated %}
+                    <ul class="dropdown-menu">
+					  <li><a href="/accounts/profile">Profile</a></li>
+					  <li class="divider"></li>
+					  <li><a href="/accounts/settings">Settings</a></li>
+						<li class="divider"></li>
+					  <li><a href="/accounts/logout">LogOut</a></li>
+        			</ul>
+                    {% else %}
+                    <ul class="dropdown-menu">
+					  <li><a href="/accounts/profile">Profile</a></li>
+					  <li class="divider"></li>
+					  <li><a href="/accounts/login">Login</a></li>
+						<li class="divider"></li>
+
+        			</ul>
+                    {% endif %}
+        		</li>
+    		</ul>
+    	</div>
+	</div>
+</nav>
+<!-- end navbar -->
+
+<!-- content -->
+<div class="container">
+    <div class="row cold-sm-8">
+        <div class="card text-center">
+        {% block content %}
+
+        {% endblock %}
+        <br></br>
+        </div>
+    </div>
+</div>
+<!-- end content -->
+
+<!--   Core JS Files   -->
+<script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/material.min.js' %}"></script>
+
+<!--  Plugin for the Sliders, full documentation here: http://refreshless.com/nouislider/ -->
+<script src="{% static 'js/nouislider.min.js' %}" type="text/javascript"></script>
+
+<!--  Plugin for the Datepicker, full documentation here: http://www.eyecon.ro/bootstrap-datepicker/ -->
+<script src="{% static 'bootstrap-datepicker.js' %}" type="text/javascript"></script>
+
+<!-- Control Center for Material Kit: activating the ripples, parallax effects, scripts from the example pages etc -->
+<script src="{% static 'js/material-kit.js' %}" type="text/javascript"></script>
+
+
+</body>
+
+
+</html>
