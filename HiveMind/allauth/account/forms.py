@@ -561,7 +561,7 @@ class UserTokenForm(forms.Form):
 
         return cleaned_data
 
-from .models import Hive, Notes, ProfileNotes, Bio, profilepic,University
+from .models import Hive, Notes, ProfileNotes, Bio, profilepic,University, MessageBoard
 from django import forms
 from django.contrib.auth.models import User
 
@@ -620,7 +620,10 @@ class SchoolForm(forms.ModelForm):  #form for adding the school you go to.
         model = University
         fields = ['school']
 
-
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = MessageBoard
+        fields = ['message']
 #
 # class ProfileForm(forms.ModelForm):
 #

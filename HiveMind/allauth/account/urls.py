@@ -36,7 +36,7 @@ urlpatterns = [
     url(r"^profile/(?P<username>\w+)/$", views.profiles, name="otherprofiles"),
     url(r"^myHive/$", views.myHive, name="my_hive"),
 
-    url(r'^create_hive/$', views.create_hive, name='create_hive'),
+    url(r'^settings/$', views.settings, name='settings'),
     url(r'^(?P<hive_id>[0-9]+)/$', views.detail, name='detail'),
     url(r'^delete_user/$', views.DeleteUser, name = 'delete'),
     url(r'^search/$', views.SearchUserbase, name = 'search'),

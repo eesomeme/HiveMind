@@ -47,6 +47,9 @@ INSTALLED_APPS = [
 
     # Including Facebook as authentication
     'allauth.socialaccount.providers.facebook',
+
+    #Media Cleanup post FileField delete
+    'django_cleanup'
 ]
 
 APP_PATH = os.path.dirname(os.path.abspath(__file__))

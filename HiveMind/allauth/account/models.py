@@ -226,7 +226,7 @@ class NoteX(models.Model):
 class ProfileNotes(models.Model):
     # user = models.ForeignKey(User, default=1)
     user = models.ForeignKey(User, default = 1)
-    notes_title = models.CharField(max_length=250)
+    notes_title = models.CharField(max_length=250, blank = True)
     notes_file = models.FileField(default='')
 
     def __str__(self):
@@ -239,9 +239,17 @@ class ProfileNotes(models.Model):
 #     def __str__(self):
 #         return self.user
 
+class MessageBoard(models.Model):
+    user = models.ForeignKey(User, default = 1)
+    hivepk = models.IntegerField(default = 0)
+    message = models.CharField(max_length = 200, blank = True)
+
+    def __str__(self):
+        return self.user
+
 class Bio(models.Model):
     user = models.ForeignKey(User, default = 1)
-    about = models.CharField(max_length = 500)
+    about = models.CharField(max_length = 500, blank = True)
 
     def __str__(self):
         return self.user
