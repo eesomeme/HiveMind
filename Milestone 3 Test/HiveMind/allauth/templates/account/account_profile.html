@@ -4,9 +4,27 @@
 
 {% block content %}
 
-<h1>Profile</h1>
-<hr></hr>
-{{ user }}
+{% load comments %}
 
+<h1>Profile</h1>
+<hr>
+{{ user }}
+<hr>
+Comments: 
+
+{% get_comment_form for user as form %}
+
+<table>
+  <form action="{% comment_form_target %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <tr>
+      <td colspan="2">
+        <input type="submit" name="submit" value="Post">
+        <input type="submit" name="preview" value="Preview">
+      </td>
+    </tr>
+  </form>
+</table>
 
 {% endblock %}

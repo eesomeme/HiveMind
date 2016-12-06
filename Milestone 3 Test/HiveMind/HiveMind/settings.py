@@ -47,6 +47,9 @@ INSTALLED_APPS = [
 
     # Including Facebook as authentication
     'allauth.socialaccount.providers.facebook',
+
+    #Comments framework
+    'django_comments'
 ]
 
 MIDDLEWARE = [

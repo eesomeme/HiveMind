@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% load static from staticfiles %}
+{% load comments %}
 
 {% block content %}
 
@@ -43,6 +44,32 @@
         {% endfor %}
     </div>
 </div>
+
+<hr>
+
+{% get_comment_count for hive as comment_count %}
+<p>{{ comment_count }} comments have been posted.</p>
+
+
+<!-- list comments -->
+{% get_comment_list for hive as comment_list %}
+{% for comment in comment_list %}
+<p>{{ comment.user_name }}: {{ comment.comment }}</p>
+{% endfor %}
+</hr>
+
+{% get_comment_form for hive as form %}
+<form action="{% comment_form_target %}" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+    {% ifequal field.name "name" %}
+        <input id="id_name" type="hidden" name="name" />
+    {% else %}{% ifequal field.name "email" %}
+        <input type="hidden" name="email" value="{{ user.email }}" id="id_email" />
+    {% else %}{{ field }}{% endifequal %}{% endifequal %}
+    {% endfor %}    
+        <input type="submit" name="submit" value="Post">
+  </form>
 
 <!-- <script src="{% static 'js/main.js' %}"></script> -->
 

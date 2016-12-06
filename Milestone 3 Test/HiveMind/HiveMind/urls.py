@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^$', views.home, name="home"),
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('allauth.urls')),
+    #comments
+    url(r'^comments/', include('django_comments.urls')),
 ]
 
 if settings.DEBUG is True:

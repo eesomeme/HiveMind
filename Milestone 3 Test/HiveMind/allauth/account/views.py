@@ -748,6 +748,7 @@ def myHive(request):
     else:
         form = HiveForm(request.POST or None, request.FILES or None)
         if form.is_valid():
+
             hive = form.save(commit=False)
             hive.user = request.user
             hive.save()
@@ -766,7 +767,6 @@ def myHive(request):
             'notes': notes_results,
         }
         return render(request, 'account/my_hive.html', context)
-
 
 def create_hive(request):
     if not request.user.is_authenticated():
