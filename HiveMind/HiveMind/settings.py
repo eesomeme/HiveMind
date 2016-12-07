@@ -147,7 +147,7 @@ AUTHENTICATION_BACKENDS = (
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# LOGIN_REDIRECT_URL = "/account/profile"
+LOGIN_REDIRECT_URL = "/accounts/myHive/"
 ACCOUNT_LOGOUT_REDIRECT_URL ="/accounts/login"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

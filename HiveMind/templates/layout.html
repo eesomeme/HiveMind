@@ -35,13 +35,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
     		</button>
-			<a class="navbar-brand" href="/accounts/myHive"><img src="{% static 'img/logo2.png' %}" class="logonav" alt=""></a>
+			<a class="navbar-brand" href="/accounts/myHive"><img src="{% static 'img/logo3.png' %}" class="logonav" alt=""></a>
 
     	</div>
 
     	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     		<ul class="nav navbar-nav navbar-right">
-				<li><a href="/accounts/myHive">My Hives</a></li>
+				<li><a href="/accounts/myHive"><i class="material-icons">public</i>My Hives</a></li>
         		<li class="dropdown">
                     {% if request.user.is_authenticated %}
 						<li><a href="/accounts/profile"><i class="material-icons">persons</i></a></li>

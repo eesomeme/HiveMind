@@ -46,5 +46,7 @@ li {
 }
 
 .logonav {
-    max-width: 20%;
+    max-width: 50%;
+    max-height: 110px;
+    margin-top: -15px;
 }
