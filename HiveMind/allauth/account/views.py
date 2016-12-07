@@ -29,8 +29,6 @@ from . import app_settings
 
 from .adapter import get_adapter
 
-
-# messing around
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
 from django.contrib.auth import authenticate, login
@@ -756,12 +754,6 @@ def profiles(request, username):
     else:
         profiledat = biop.first().about
 
-        # pic = ProfilePic.objects.filter(user = request.user)
-        # context = {
-        #     'bio': bio,
-        #     'pic': pic,
-        # }
-
     user_notes = ProfileNotes.objects.all()
 
     return render(request, 'account/otherprofiles.html', {'user': username, 'u': u, 'bio': profiledat, 'portfolio': user_notes })
@@ -798,11 +790,6 @@ def profile(request):
 
             return render(request, 'account/account_profile.html', {'user': request.user, 'bio': profiledat.about, 'bioform' : form, 'uploader' : NotesForm, 'portfolio': user_notes})
 
-        # pic = ProfilePic.objects.filter(user = request.user)
-        # context = {
-        #     'bio': bio,
-        #     'pic': pic,
-        # }
         biop = Bio.objects.filter(user=request.user)
         if not biop:
             profiledat = "Add A Bio!"
@@ -872,7 +859,7 @@ def detail(request, hive_id):
     Dorm = AddForm()
     Remove = RemoveForm()
     Del = DeleteForm()
-    Comm = MessageForm()
+    Comm = MessageForm(request.POST or None)
     proper = 0
     hive = get_object_or_404(Hive, pk=hive_id)
 
@@ -894,7 +881,7 @@ def detail(request, hive_id):
         persons = hive.user.all()
 
         board = MessageBoard.objects.all()
-        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board})
+        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
 
 
     if Comm.is_valid():
@@ -902,13 +889,13 @@ def detail(request, hive_id):
         new.user = request.user
         new.hivepk = int(hive_id)
         new.save()
-
+        print new.message
         user = request.user
         hive = get_object_or_404(Hive,pk = hive_id)
         notes = Notes.objects.all()
         persons = hive.user.all()
         board = MessageBoard.objects.all()
-        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board})
+        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
 
 
 
@@ -934,7 +921,7 @@ def detail(request, hive_id):
                         Hive.objects.filter(pk = hive_id).delete()
 
                         return redirect('/accounts/myHive')
-                    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board})
+                    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
                 if not hive.user.filter(username = exist.first().username):
                     hive.user.add(exist.first())
                 elif hive.user.filter(username = exist.first().username):
@@ -944,7 +931,7 @@ def detail(request, hive_id):
                 notes = Notes.objects.all()
                 persons = hive.user.all()
                 board = MessageBoard.objects.all()
-                return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board})
+                return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
         else:
             if 'remove' in request.POST:
                 Remove = RemoveForm(request.POST or None)
@@ -963,7 +950,7 @@ def detail(request, hive_id):
 
                             return redirect('/accounts/myHive')
                         board = Message.objects.all()
-                        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board})
+                        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
                     if hive.user.filter(username = exitR.first().username):
                         hive.user.remove(exitR.first())
                     elif not hive.user.filter(username = exitR.first().username):
@@ -977,11 +964,11 @@ def detail(request, hive_id):
 
                         return redirect('/accounts/myHive')
                     board = MessageBoard.objects.all()
-                    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board})
+                    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
 
         if 'delete' in request.POST:
             Del = DeleteForm(request.POST or None)
-            if Del.is_valid():                             #Remove Notes
+            if Del.is_valid():
 
                 notes = Del.cleaned_data['notes_title']
                 hivepk1 = int(hive_id)
@@ -997,27 +984,14 @@ def detail(request, hive_id):
                 notes = Notes.objects.all()
                 persons = hive.user.all()
                 board = MessageBoard.objects.all()
-                return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board})
-            # else:
-
-
-
-
-
-
-
+                return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
 
     user = request.user
     hive = get_object_or_404(Hive, pk=hive_id)
     notes = Notes.objects.all()
     persons = hive.user.all()
     board = MessageBoard.objects.all()
-    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete': Del, 'persons' : persons, 'proper': proper, 'board': board})
-
-
-
-
-
+    return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete': Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
 
 def DeleteUser(request):
     if not request.user.is_authenticated():
@@ -1056,8 +1030,6 @@ def SearchUserbase(request):
 
     peeps = 0
     return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS, 'peeps': peeps,})
-
-
 
 # def profilepicupload(request):
 #     pic = picForm(request.POST or None, request.FILES or None)
