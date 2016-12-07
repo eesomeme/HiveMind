@@ -6,7 +6,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 90vh;
 }
 
 .removePad {
@@ -30,4 +30,21 @@ li {
 
 #evilLine {
     text-decoration: none;
+}
+
+.login-logo {
+    max-width: 75%;
+    padding-bottom: 4%
+}
+
+.logo {
+    max-width: 40%;
+}
+
+.logorow {
+    text-align: center;
+}
+
+.logonav {
+    max-width: 20%;
 }

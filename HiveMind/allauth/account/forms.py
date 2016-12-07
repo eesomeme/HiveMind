@@ -28,7 +28,6 @@ try:
 except ImportError:
     from django.utils.importlib import import_module
 
-
 class PasswordVerificationMixin(object):
     def clean(self):
         cleaned_data = super(PasswordVerificationMixin, self).clean()

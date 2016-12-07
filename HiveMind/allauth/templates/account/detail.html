@@ -24,11 +24,6 @@
       <b><i>OH NO!</i></b>, That user <b>DOES NOT</b> exist in HiveMind #SpreadTheWordTho
   {%endif%}
 
-
-
-
-
-
 </h2>
 
 <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalHorizontal">
@@ -109,55 +104,6 @@
       </div>
     </div>
 
-
-
-
-
-<!-- <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <div class="" id = "notes">
-        <div>
-            <label for="id_notes_title">Notes title:</label>
-            <div>
-                <input id="id_notes_title" maxlength="250" name="notes_title" type="text" required="">
-                <button class="btn btn-info" id="fileSubmit" type="submit"> upload </button>
-            </div>
-        </div>
-        <div class="col-sm-offset-5">
-            <input class="" id="id_notes_file" name="notes_file" type="file" required="">
-        </div>
-
-    </div>
-
-</form> -->
-
-
-
-<!--
-<form method="POST" enctype="multipart/form-data" action = "">
-    {% csrf_token %}
-
-    <div class="" id = "delete">
-        <div>
-            <label for="id_username">Remove File:</label>
-              {{ delete }}
-                <button class="btn btn-info" id="delete" type="submit" name = "delete">delete </button>
-        </div>
-
-    </div>
-
-</form> -->
-
-
-<!-- <form method="POST" id="post-form">
-    {% csrf_token %}
-    <input id="" maxlength="250" name="post" type="text" required="">
-    <button class="btn btn-info" type="submit"> Post </button>
-</form> -->
-
-
-
-
 <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalusers">
     Our Members
 </button>
@@ -235,91 +181,6 @@
           </div>
           </div>
 
-
-
-
-
-
-
-
-
-
-
-
-<!-- <h4>Messages<h4>
-  <div class"">
-    <div>
-      <input id="id_notes_title" maxlength="250" name="notes_title" type="text" required="">
-    </div>
-  </div> -->
-
 <script src="{% static 'js/main.js' %}"></script>
- <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script>
-
-
-// function upload(event) {
-// event.preventDefault();
-// var data = new FormData($('form').get(0));
-// var add = new FormData($('dorm').get(0));
-// var remove = new FormData($('remove').get(0));
-// $.ajax({
-//     url: $(this).attr('action'),
-//     type: $(this).attr('method'),
-//
-//     data: data,
-//     add: add,
-//     remove: remove,
-//     cache: false,
-//     processData: false,
-//     contentType: false,
-//
-//     success: function(data,add,remove) {
-//         alert('success');
-//         $('#max').load(document.URL +  ' #max');
-//     }
-//
-// });
-// return false;
-// }
-//
-// $(function() {
-//     $('form').submit(upload);
-//     $('remove').submit(upload);
-//     $('dorm').submit(upload);
-//
-// });
-
-
-
-
-
-
-
-
-
-// $(function() {
-//   var el = document.getElementById("fileSubmit");
-// 	if (el.addEventListener)
-// 	 el.addEventListener("click", doUpload, false);
-//   console.log("Test");
-//
-//   function doUpload() {
-//         var dataObject = {
-// 					filename : "test.txt",
-// 				};
-//
-// 				$.ajax({
-// 					url: 'scriptToRun.py',
-// 					type: 'POST',
-// 					data: dataObject,
-//
-// 					// Do indented code if it worked
-// 					success: function(output) {
-//             console.log("it worked")
-//           }
-//       });
-//   }
-// });
-</script>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 {% endblock %}

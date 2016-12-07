@@ -1,7 +1,7 @@
 import django
 from django.contrib import admin
 
-from .models import EmailConfirmation, EmailAddress, Notes, Hive, University
+from .models import EmailConfirmation, EmailAddress, Notes, Hive, University, ProfileNotes
 from .adapter import get_adapter
 
 
@@ -32,3 +32,4 @@ admin.site.register(EmailAddress, EmailAddressAdmin)
 admin.site.register(Notes)
 admin.site.register(Hive)
 admin.site.register(University)
+admin.site.register(ProfileNotes)

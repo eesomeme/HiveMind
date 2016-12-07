@@ -179,32 +179,18 @@ class EmailConfirmationHMAC:
                                              confirmation=self,
                                              signup=signup)
 
+
 from django.contrib.auth.models import Permission, User
 from django.db import models
 
 class Hive(models.Model):
     user = models.ManyToManyField(User, related_name = "member")
     course = models.CharField(max_length=500)
-    # notes = models.ManyToManyField(Notes, related_name = "notebooks")
-    #Hivepk = models.IntegerField(random)
-    #auto_increment_id = models.AutoField(primary_key=True
-    #primary_keyid = models.AutoField(primary_key=True)
 
     def __str__(self):
         return self.course
-# class Hive(models.Model):
-#     user = models.ManyToManyField(User)
-#     course = models.CharField(max_length=500)
-#
-#     def __str__(self):
-#         return self.course
-
-
-
-
 
 class Notes(models.Model):
-    # user = models.ForeignKey(User, default=1)
     hive = models.ForeignKey(Hive, on_delete=models.CASCADE)
     hivepk = models.IntegerField(default = 0)
     notes_title = models.CharField(max_length=250)
@@ -212,19 +198,8 @@ class Notes(models.Model):
 
     def __str__(self):
         return self.notes_title
-
-class NoteX(models.Model):
-    hive = models.ForeignKey(Hive, on_delete=models.CASCADE)
-    hivepk = models.IntegerField(default = 0)
-    notes_title = models.CharField(max_length=250)
-    notes_file = models.FileField(default='')
-
-    def __str__(self):
-        return self.notes_title
-
 
 class ProfileNotes(models.Model):
-    # user = models.ForeignKey(User, default=1)
     user = models.ForeignKey(User, default = 1)
     notes_title = models.CharField(max_length=250, blank = True)
     notes_file = models.FileField(default='')
@@ -232,17 +207,10 @@ class ProfileNotes(models.Model):
     def __str__(self):
         return self.notes_title
 
-# class ProfilePic(models.Model):
-#     user = models.OneToOneField(User)
-#     pic = models.ImageField(default='')
-#
-#     def __str__(self):
-#         return self.user
-
 class MessageBoard(models.Model):
     user = models.ForeignKey(User, default = 1)
     hivepk = models.IntegerField(default = 0)
-    message = models.CharField(max_length = 200, blank = True)
+    message = models.CharField(max_length = 500, blank = True)
 
     def __str__(self):
         return self.user
@@ -267,11 +235,3 @@ class University(models.Model):
 
     def __str__(self):
         return self.school
-
-
-# class HiveInfo(models.Model):
-#     Hive = models.ForeignKey(Hive, default = 1)
-#     about = models.CharField(max_length = 1000)
-#
-#     def __str(self):
-#         return self.user
