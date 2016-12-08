@@ -131,10 +131,10 @@
     </form>
 </div>
 
-
 <div class="col-sm-11">
-    <div class="col-sm-12 col-sm-offset-2 botPadding">
-        {% for hive in hives %}
+	{% for hive in hives %}
+    <div class="col-sm-6 col-sm-offset-2 botPadding">
+
         <div class="" id="hives">
             <a href="/accounts/{{ hive.id }}/">
                 <div class="btn btn-warning col-sm-3 hives">
@@ -142,8 +142,9 @@
                 </div>
             </a>
         </div>
-        {% endfor %}
+
     </div>
+	{% endfor %}
 </div>
 
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>

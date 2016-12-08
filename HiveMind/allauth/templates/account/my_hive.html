@@ -1,4 +1,4 @@
-{% load static from staticfiles %}
+<!-- {% load static from staticfiles %}
 
 <!doctype html>
 <html lang="en">
@@ -60,11 +60,11 @@
 
 <!-- content -->
 <div class="container">
-    <div class="row col-sm-12">
-        <div class="card text-center">
 
+    <div class="row col-sm-10 col-sm-offset-1">
+
+        <div class="card text-center">
             <h1>My Hives</h1>
-            <hr />
             <h3>Create a Hive</h3>
 
             <div class="col-xs-12 botPadding">
@@ -73,21 +73,38 @@
                     <!-- <label for="id_course">Add Course: </label> -->
                     <div class="col-xs-4 col-xs-offset-4">
                         <input id="id_course" maxlength="500" name="course" type="text" class="form-control textCenter" placeholder="Enter Course Name..."required="">
-                        <button class="btn btn-info brn-large" type="submit"> Create </button>
+                        <button class="btn btn-info" type="submit"> Create </button>
                     </div>
                 </form>
             </div>
-
-
-
-
-
-
-
-
-
         </div>
     </div>
+
+    <div class="col-sm-10 col-sm-offset-1">
+
+		{% for hive in hives %}
+		<a href="/accounts/{{ hive.id }}/">
+        <div class="card text-center topPad2 width3 hiveCourse">
+            <!-- <div class="col-xs-4 col-xs-offset-4"> -->
+                <!-- <div class="col-sm-12 col-sm-offset-2 botPadding"> -->
+
+                    <div class="text-center" id="hives">
+						<h2 class="pad60Bot">{{ hive.course }}</h2>
+
+                            <!-- <div class="btn btn-warning hives"> -->
+
+                            <!-- </div> -->
+
+                    </div>
+
+                <!-- </div> -->
+            <!-- </div> -->
+        </div>
+		</a>
+		{% endfor %}
+
+    </div>
+
 </div>
 <!-- end content -->
 
@@ -136,19 +153,7 @@
 
 
 
-<!-- <div class="col-sm-11">
-    <div class="col-sm-12 col-sm-offset-2 botPadding">
-        {% for hive in hives %}
-        <div class="" id="hives">
-            <a href="/accounts/{{ hive.id }}/">
-                <div class="btn btn-warning col-sm-3 hives">
-                    {{ hive.course }}
-                </div>
-            </a>
-        </div>
-        {% endfor %}
-    </div>
-</div> -->
+
 
 <!-- <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 
