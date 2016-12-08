@@ -40,7 +40,6 @@ from .forms import HiveForm, NotesForm, AddForm, RemoveForm, DeleteForm, BioForm
 from .models import Notes, Hive, profilepic, Bio, ProfileNotes, MessageBoard
 from django.contrib.auth.models import User
 
-
 sensitive_post_parameters_m = method_decorator(
     sensitive_post_parameters('password', 'password1', 'password2'))
 
@@ -1030,21 +1029,3 @@ def SearchUserbase(request):
 
     peeps = 0
     return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS, 'peeps': peeps,})
-
-# def profilepicupload(request):
-#     pic = picForm(request.POST or None, request.FILES or None)
-#     hive = get_object_or_404(Hive, pk=hive_id)
-#     if form.is_valid():
-#         pic = profilepics.notes_set.all()
-#         pics = form.save(commit=False)
-#         bio.user = user
-
-#
-#         user = request.user
-#
-#         return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form })
-#
-#     user = request.user
-#     bio = get_object_or_404(Bio, pk=bio_id)
-#
-#     return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form })

@@ -53,8 +53,7 @@
                   <div class="text-center">
                       {% for note in notes %}
                           {% if hive.pk == note.hivepk %}
-
-                              <a class="btn btn-warning" href="{{ note.notes_file.url }}" preview> <p> {{ note.notes_title }}</p></a>
+                              <a class="btn btn-warning" href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
                           {% endif %}
                       {% endfor %}
                   </div>
