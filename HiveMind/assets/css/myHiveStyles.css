@@ -1,9 +1,11 @@
 .outHive {
-    padding: 50px 50px 50px 50px;
+    /*padding: 50px 50px 50px 50px;*/
 }
 .hives {
-    padding: 70px 70px 70px 70px;
-    margin: 20px 20px 20px 20px
+    /*padding: 100px 50px 100px 50px;*/
+    /*margin: 0px 20px 0px 20px*/
+    display: inline;
+    float: left;
 }
 #noRightPad {
     padding-right: 0px;

@@ -20,7 +20,6 @@
     <link href="{% static 'css/material-kit.css' %}" rel="stylesheet"/>
 	<link href="{% static 'css/styler.css' %}" rel="stylesheet"/>
 	<link href="{% static 'css/loginStyles.css' %}" rel="stylesheet"/>
-    <link href="{% static 'css/myHiveStyles.css' %}" rel="stylesheet"/>
 
 </head>
 
@@ -58,34 +57,17 @@
 </nav>
 <!-- end navbar -->
 
+
+
+
 <!-- content -->
 <div class="container">
-    <div class="row col-sm-12">
+    <div class="row cold-sm-8">
         <div class="card text-center">
+        {% block content %}
 
-            <h1>My Hives</h1>
-            <hr />
-            <h3>Create a Hive</h3>
-
-            <div class="col-xs-12 botPadding">
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <!-- <label for="id_course">Add Course: </label> -->
-                    <div class="col-xs-4 col-xs-offset-4">
-                        <input id="id_course" maxlength="500" name="course" type="text" class="form-control textCenter" placeholder="Enter Course Name..."required="">
-                        <button class="btn btn-info brn-large" type="submit"> Create </button>
-                    </div>
-                </form>
-            </div>
-
-
-
-
-
-
-
-
-
+        {% endblock %}
+        <br></br>
         </div>
     </div>
 </div>
@@ -129,14 +111,28 @@
 
 
 
+{% extends "layout.html" %}
+{% load static from staticfiles %}
+
+{% block content %}
+
+<link href="{% static 'css/myHiveStyles.css' %}" rel="stylesheet"/>
+
+<h1>My Hives</h1>
+
+<div class="col-xs-12 botPadding">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- <label for="id_course">Add Course: </label> -->
+        <div class="col-xs-4 col-xs-offset-4">
+            <input id="id_course" maxlength="500" name="course" type="text" class="form-control textCenter" placeholder="Enter Course Name..."required="">
+            <button class="btn btn-info" type="submit"> Create </button>
+        </div>
+    </form>
+</div>
 
 
-
-
-
-
-
-<!-- <div class="col-sm-11">
+<div class="col-sm-11">
     <div class="col-sm-12 col-sm-offset-2 botPadding">
         {% for hive in hives %}
         <div class="" id="hives">
@@ -148,10 +144,11 @@
         </div>
         {% endfor %}
     </div>
-</div> -->
+</div>
 
-<!-- <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 
+{% endblock %}
 
 <script>
 function add(event) {
@@ -180,4 +177,4 @@ $(function() {
     $('form').submit(add);
 
 });
-</script> -->
+</script>

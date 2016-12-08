@@ -50,3 +50,15 @@ li {
     max-height: 110px;
     margin-top: -15px;
 }
+
+.myHiveNav {
+    margin-right: -75px;
+}
+
+.textCenter {
+    text-align: center;
+}
+
+.botPadding {
+    padding-bottom: 30px;
+}
