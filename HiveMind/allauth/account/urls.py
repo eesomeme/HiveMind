@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^(?P<hive_id>[0-9]+)/$', views.detail, name='detail'),
     url(r'^delete_user/$', views.DeleteUser, name = 'delete'),
     url(r'^search/$', views.SearchUserbase, name = 'search'),
+    url(r'^view_pdf/$', views.view_pdf, name = 'search'),
 
 
 ]

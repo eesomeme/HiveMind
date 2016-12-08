@@ -831,26 +831,43 @@ def myHive(request):
 
         return render(request, 'account/my_hive.html', context)
 
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
 
-def create_hive(request):
+import os.path
+
+def view_pdf(request):
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
     else:
-        form = HiveForm(request.POST or None, request.FILES or None)
-        if form.is_valid():
-            hive = form.save(commit=False)
-            hive.user.add(request.user)
-            hive.save()
-            hives = Hive.objects.filter(user=request.user)
-            notes_results = Notes.objects.all()
-            return render(request, 'account/my_hive.html', {
-                'hives': hives,
-                'notes': notes_results
-            })
-        context = {
-            "form": form,
-        }
-        return redirect(request, 'account/create_hive.html', context)
+        BASE = os.path.dirname(os.path.abspath(__file__))
+
+        #Create the HttpResponse object with the appropriate PDF headers.
+        image_data = open(os.path.join(BASE, "/Users/Vasim/Desktop/HiveMind/HiveMind/HiveMind/media/AlbertPaper.pdf"), "rb").read()
+        response = HttpResponse(image_data, content_type='AlbertPaper.pdf')
+        response['Content-Disposition'] = 'inline; filename="AlbertPaper.pdf"'
+
+        # Create the PDF object, using the response object as its "file."
+
+        # Draw things on the PDF. Here's where the PDF generation happens.
+        # See the ReportLab documentation for the full list of functionality.
+
+        # Close the PDF object cleanly, and we're done.
+        # with open('media/AlbertPaper.pdf', 'r') as pdf:
+        #     response = HttpResponse(pdf.read(), content_type='media/AlbertPaper.pdf')
+        #     response['Content-Disposition'] = 'inline; filename="AlbertPaper_1.pdf"'
+        #     return response
+        # pdf.closed
+
+
+
+
+
+
+        # image_data = open("/AlbertPaper.pdf", "rb").read()
+        return response
+
+
 
 def detail(request, hive_id):
 
@@ -872,6 +889,7 @@ def detail(request, hive_id):
         notes = form.save(commit=False)
         notes.hive = hive
         notes.hivepk = int(hive_id)
+        notes.notes_title = notes.notes_title.lower()
 
         notes.notes_file = request.FILES['notes_file']
         notes.save()
@@ -880,20 +898,6 @@ def detail(request, hive_id):
         notes = Notes.objects.all()
         persons = hive.user.all()
 
-        board = MessageBoard.objects.all()
-        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
-
-
-    if Comm.is_valid():
-        new = Comm.save(commit = False)
-        new.user = request.user
-        new.hivepk = int(hive_id)
-        new.save()
-        print new.message
-        user = request.user
-        hive = get_object_or_404(Hive,pk = hive_id)
-        notes = Notes.objects.all()
-        persons = hive.user.all()
         board = MessageBoard.objects.all()
         return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
 
@@ -970,7 +974,7 @@ def detail(request, hive_id):
             Del = DeleteForm(request.POST or None)
             if Del.is_valid():
 
-                notes = Del.cleaned_data['notes_title']
+                notes = Del.cleaned_data['notes_title'].lower()
                 hivepk1 = int(hive_id)
                 print notes
 
@@ -991,6 +995,23 @@ def detail(request, hive_id):
     notes = Notes.objects.all()
     persons = hive.user.all()
     board = MessageBoard.objects.all()
+
+
+    if Comm.is_valid():
+        new = Comm.save(commit = False)
+        new.user = request.user
+        new.hivepk = int(hive_id)
+        new.save()
+        print new.message
+        user = request.user
+        hive = get_object_or_404(Hive,pk = hive_id)
+        notes = Notes.objects.all()
+        persons = hive.user.all()
+        board = MessageBoard.objects.all()
+        return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
+
+
+
     return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete': Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
 
 def DeleteUser(request):

@@ -130,7 +130,7 @@
                       {% for note in notes %}
                           {% if hive.pk == note.hivepk %}
 
-                              <a class="btn btn-warning" href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
+                              <a class="btn btn-warning" id = "notesbutt" onClick = "window.open('{{note.notes_file.url}}');"> <p> {{ note.notes_title }}</p></a>
                           {% endif %}
                       {% endfor %}
                   </div>
@@ -259,6 +259,33 @@
 
 
 
+
+
+
+
 <script src="{% static 'js/main.js' %}"></script>
 <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+
+<script>
+
+// var inputElement = document.getElement('notesbutt');
+// inputElement.type = "button"
+// inputElement.addEventListener('click', function(){
+//   <iframe src=inputElement.
+//   style="width:600px; height:500px;" frameborder="0"></iframe>
+// });
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
 {% endblock %}
