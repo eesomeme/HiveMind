@@ -69,11 +69,12 @@
                     <div class="comments">
 
                     {% for comment in board %}
-                      {% if comment.hikepk == hive_id %}
+
+                      {% if comment.hivepk == hive.pk %}
 
                         <p>{{comment.message}} <a class="" href=/accounts/profile/{{comment.user}}> <p> {{comment.user}}</p></a></p>
                         <p>{{comment.time}}<p>
-
+                        <p>________________</p>
 
                       {%endif%}
                     {%endfor%}

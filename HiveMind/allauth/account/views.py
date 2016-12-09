@@ -879,6 +879,7 @@ def detail(request, hive_id):
     Comm = MessageForm(request.POST or None)
     proper = 0
     hive = get_object_or_404(Hive, pk=hive_id)
+    thepk = int(hive.pk)
 
     if not Hive.objects.filter(pk = hive_id, user = request.user):
         return redirect('/accounts/profile')
@@ -920,7 +921,7 @@ def detail(request, hive_id):
                     hive = get_object_or_404(Hive, pk=hive_id)
                     notes = Notes.objects.all()
                     persons = hive.user.all()
-                    board = Message.objects.all()
+                    board = MessageBoard.objects.all()
                     if not persons:
                         Hive.objects.filter(pk = hive_id).delete()
 
@@ -953,7 +954,7 @@ def detail(request, hive_id):
                             Hive.objects.filter(pk = hive_id).delete()
 
                             return redirect('/accounts/myHive')
-                        board = Message.objects.all()
+                        board = MessageBoard.objects.all()
                         return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
                     if hive.user.filter(username = exitR.first().username):
                         hive.user.remove(exitR.first())
@@ -1026,31 +1027,19 @@ def SearchUserbase(request):
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
     userS = SearchUserForm()
-    universityS = SearchUniversityForm()
-
-    if request.method == "POST":
-        userS = UserSearchForm(request.POST or None)
-        user = userS.cleaned_data['username']
-        userlist = User.objects.filter(username = user)
-        univeristyS = SearchUniversityForm(request.POST or None)
-        university = univeristyS.cleaned_data['university']
-        uniList = University.objects.filter(school = university)
-        x = User.objects.studentof(uniList.first())
-
-        if not userList:
-            if uniList:
-                peeps = 1
-                return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS,'university': uniList.first(), 'peeps': peeps, 'thepeople': x})
-        else:
-            if not uniList:
-                peeps = 2
-                return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS,'users': userList.first(),'peeps': peeps, 'thepeople': x})
-            else:
-                peeps = 3
-                return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS, 'university': uniList.first(), 'user': userList.first(), 'peeps': peeps, 'thepeople': x})
-
     peeps = 0
-    return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS, 'peeps': peeps,})
+    if request.method == "POST":
+        userS = SearchUserForm(request.POST or None)
+        print userS
+        user = userS.cleaned_data['username']
+        userlist = User.objects.filter(username__contains=user)
+        if not userlist:
+            peeps = 1
+        return render(request, 'account/search.html', {'userbox':userS, 'peeps': peeps, 'users': userlist})
+
+
+
+    return render(request, 'account/search.html', {'userbox':userS, 'peeps': peeps})
 
 # def profilepicupload(request):
 #     pic = picForm(request.POST or None, request.FILES or None)
