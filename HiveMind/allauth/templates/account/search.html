@@ -3,141 +3,69 @@
 
 {% block content %}
 
+<div class="row">
+    <div class="card text-center">
+        <h1> Search for Users</h1>
+        <form method="POST" enctype="multipart/form-data" action = "" name = "userbox">
+            {% csrf_token %}
 
-<div class = "" id = "whole" name = "whole">
+            <div class="col-xs-6 col-xs-offset-3">
+                <input class="form-control text-center" id="id_username" maxlength="250" name="username" type="text" required="">
+            </div>
 
-  <h1> Search Users</h1>
-
-  <form method="POST" enctype="multipart/form-data" action = "" name = "userbox">
-      {% csrf_token %}
-
-      <div class="" id = "User">
-          <div>
-              <label for="id_username" name = "user">Username:</label>
-
-
-                {{userbox}}
-
-
-                  <button class="btn btn-info" type="submit" id = "mainID" name = 'userbox'> Find </button>
+            <div class="col-xs-6 col-xs-offset-3">
+                <button class="btn btn-info" type="submit" id ="mainID" name = 'userbox'> Find </button>
+            </div>
 
 
-
-
-          </div>
-
-      </div>
+        </form>
+    </div>
+</div>
 
 
 
+<div class="row">
+    <div class="card text-center" style="margin-top: 2%">
+        <h1> Results </h1>
+        {%if peeps == 0%}
+            {% for user in users %}
+                <a class="btn btn-default" href=/accounts/profile/{{ user.username }}><p> {{ user.username}}</p></a>
+            {%endfor%}
+        {%endif%}
 
-
-  </form>
-
-
-
-
-
-  <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script></script>
-
-
-
-  <script>
-
-  // function search(event) {
-  // event.preventDefault();
-  //
-  //
-  // $.ajax({
-  //
-  //
-  //
-  //
-  //
-  //   type: frm.attr('method'),
-  //           url: frm.attr('action'),
-  //           data: frm.serialize(),
-  //           success: function (data) {
-  //               $("#SOME-DIV").html(data);
-  //           },
-  //           error: function(data) {
-  //               $("#MESSAGE-DIV").html("Something went wrong!");
-  //           }
-  //
-  //
-  //
-  // });
-  //
-  // return false;
-  // }
-  //
-  // $(function() {
-  //     $('form').submit(search);
-  //
-  // });
-  $(document).ready(function() {
-          $('#form').submit(function e () { // catch the form's submit event
-          alert('haa');
-              $.ajax({ // create an AJAX call...
-                  data: $(this).serialize(), // get the form data
-                  type: $(this).attr('method'), // GET or POST
-                  url: $(this).attr('action'), // the file to call
-                  alert('herr');
-                  success: function(response) { // on success..
-                    console.log("dfasdf");
-                    alert('fuck you ');
-                    $('#searcher').load(document.URL +  ' #searcher');
-                  }
-              });
-              return false;
-          });
-      });
-
-  </script>
-
-
-
-
-  <div class = "" id = "searcher" name = 'searcher'>
-    {%if peeps == 0%}
-      <h1> Results
-
-      <div class = "" id = "results" name = "results">
-
-      {% for user in users %}
-
-          <a class="btn btn-warning" href=/accounts/profile/{{person.username}}> <p> {{ user.username}}</p></a>
-
-      {%endfor%}
-
-      </div>
-    {%endif%}
-
-
-    {% if peeps == 1%}
-      <h1>OH NO, NO USERNAME CONTAINS ANY OF THAT INPUT!<h1>
-
-    {%endif%}
-  </div>
-
+        {% if peeps == 1%}
+            <h3>That user does not exist<h3>
+        {%endif%}
+    </div>
 </div>
 
 
 
 
 
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 
+    <script>
 
+    $(document).ready(function() {
+        $('#form').submit(function e () { // catch the form's submit event
+        alert('haa');
+        $.ajax({ // create an AJAX call...
+            data: $(this).serialize(), // get the form data
+            type: $(this).attr('method'), // GET or POST
+            url: $(this).attr('action'), // the file to call
+            alert('herr');
+            success: function(response) { // on success..
+                console.log("dfasdf");
+                alert('fuck you ');
+                $('#searcher').load(document.URL +  ' #searcher');
+            }
+        });
+        return false;
+    });
+});
 
-
-
-
-
-
-
-
-
+</script>
 
 {% endblock %}

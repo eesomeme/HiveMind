@@ -1,102 +1,102 @@
 {% extends "layout.html" %}
-
 {% block head_title %}Hive Profile{% endblock %}
 
 {% block content %}
 
-<h1>{{user}}</h1>
+<div class="row">
+    <div class="col-xs-12 card" style="padding-bottom: 3%;">
+        <div class="content" style="text-align: center">
+            <h1>{{user}}</h1>
 
-<form method="POST" enctype="multipart/form-data" action = "" required = "False">
-    {% csrf_token %}
-
-    <div class="" id = "BioUpdate">
-
-        {{bioform}}
-        <button class="btn btn-info" id="Add" type="submit"> add </button>
-
-    </div>
-
-
-</form>
-
-<div>
-    <label for="id_bio">Your Bio:</label>
-      {{ bio }}
-</div>
-
-
-
-<form method="POST" enctype="multipart/form-data" action = "">
-    {% csrf_token %}
-
-    <div class="" id = "AddPages">
-      <button class="btn btn-info" id="Add" type="submit"> add </button>
-        {{uploader}}
-
-
-    </div>
-</form>
-
-
-<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalHorizontal">
-    Your Notes
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="myModalHorizontal" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <button type="button" class="close"
-                   data-dismiss="modal">
-                       <span aria-hidden="true">&times;</span>
-                       <span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">
-                    My Notes
-                </h4>
+            <p>Profile Description:</p>
+            <div class="">
+                <h3>
+                    {{ bio }}
+                </h3>
             </div>
 
-            <!-- Modal Body -->
-            <div class="modal-body">
+            <div class="col-xs-6 col-xs-offset-3">
+                <form method="POST" enctype="multipart/form-data" action = "" required = "False">
+                    {% csrf_token %}
 
-              <div class="row" id = "max">
-                  <div class="text-center">
-                      {% for note in portfolio %}
-                          {% if user == note.user %}
+                    <label>Enter bio here:</label>
+                    <textarea class="form-control text-center" id="id_about" maxlength="500" name="about" type="text">
+                    </textarea>
+                    <button class="btn btn-info" id="Add" type="submit"> Update Bio </button>
+                </form>
+            </div>
 
-                              <a class="btn btn-warning" href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
-                          {% endif %}
-                      {% endfor %}
-                  </div>
-              </div>
+            <div class="col-xs-12">
+                <button class="btn btn-warning" id="Add" data-toggle="modal" data-target="#myModal"> Upload a File </button>
+                <button class="btn btn-warning" id="Add" data-toggle="modal" data-target="#myModal2"> My Files </button>
+            </div>
 
-
-
-
-
+            <div class="col-xs-12">
 
             </div>
 
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                            Close
-                </button>
-                <button type="button" class="btn btn-primary">
-                    Save changes
-                </button>
+
+            <!-- Modal for file upload -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Upload a File</h4>
+                        </div>
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="modal-body">
+                                <input class = "form-control" id="id_notes_title" maxlength="250" name="notes_title" type="text">
+                                <input class="" id="id_notes_file" name="notes_file" type="file" required="">
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-info btn-simple" id="fileSubmit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
+
+            <!-- Modal for file list -->
+            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">My Notes</h4>
+                        </div>
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="modal-body">
+                                {% for note in portfolio %}
+                                    {% if user == note.user %}
+                                        <a class="btn btn-warning" href="{{ note.notes_file.url }}" download> <p> {{ note.notes_title }}</p></a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-info btn-simple" id="fileSubmit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>
-
-
-
-
 
 
 {% endblock %}
