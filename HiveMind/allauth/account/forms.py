@@ -578,7 +578,7 @@ class NotesForm(forms.ModelForm):
 
 class AddForm(forms.Form):
 
-    a = forms.CharField(max_length=250)
+    addUser = forms.CharField(max_length=250)
 
 class DeleteForm(forms.Form):
 
@@ -587,7 +587,7 @@ class DeleteForm(forms.Form):
 
 class RemoveForm(forms.Form):
 
-    a = forms.CharField(max_length=250, required = True)
+    removeUser = forms.CharField(max_length=250, required = True)
 
 class SearchUserForm(forms.Form):
     username = forms.CharField(max_length=250)

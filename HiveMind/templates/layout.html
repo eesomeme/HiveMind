@@ -20,6 +20,7 @@
     <link href="{% static 'css/material-kit.css' %}" rel="stylesheet"/>
 	<link href="{% static 'css/styler.css' %}" rel="stylesheet"/>
 	<link href="{% static 'css/loginStyles.css' %}" rel="stylesheet"/>
+	<link href="{% static 'css/myHiveStyles.css' %}" rel="stylesheet"/>
 
 </head>
 
@@ -61,13 +62,12 @@
 
 <!-- content -->
 <div class="container">
-    <div class="row cold-sm-8">
-        <div class="card text-center">
-        {% block content %}
+    <div class="row col-sm-10 col-sm-offset-1">
+		{% block content %}
 
-        {% endblock %}
-        <br></br>
-        </div>
+
+
+		{% endblock %}
     </div>
 </div>
 <!-- end content -->

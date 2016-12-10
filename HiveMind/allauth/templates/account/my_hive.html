@@ -1,4 +1,4 @@
-<!-- {% load static from staticfiles %}
+{% load static from staticfiles %}
 
 <!doctype html>
 <html lang="en">
@@ -10,7 +10,7 @@
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 
-	<!--     Fonts and icons     -->
+	<!-- Fonts -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
@@ -36,7 +36,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
     		</button>
-			<a class="navbar-brand myHiveNav" href="/accounts/myHive"><img src="{% static 'img/logo3.png' %}" class="logonav" alt=""></a>
+			<a class="navbar-brand" href="/accounts/myHive"><img src="{% static 'img/logo3.png' %}" class="logonav" alt=""></a>
     	</div>
 
     	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -85,20 +85,11 @@
 		{% for hive in hives %}
 		<a href="/accounts/{{ hive.id }}/">
         <div class="card text-center topPad2 width3 hiveCourse">
-            <!-- <div class="col-xs-4 col-xs-offset-4"> -->
-                <!-- <div class="col-sm-12 col-sm-offset-2 botPadding"> -->
 
-                    <div class="text-center" id="hives">
-						<h2 class="pad60Bot">{{ hive.course }}</h2>
-
-                            <!-- <div class="btn btn-warning hives"> -->
-
-                            <!-- </div> -->
-
-                    </div>
-
-                <!-- </div> -->
-            <!-- </div> -->
+			<div class="text-center" id="hives">
+				<h2 class="pad60Bot">{{ hive.course }}</h2>
+            </div>
+			
         </div>
 		</a>
 		{% endfor %}
@@ -127,32 +118,6 @@
 
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <!-- <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>

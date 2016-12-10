@@ -23,11 +23,6 @@ ul {
     text-align: center;;
 }
 
-li {
-    text-align: center;
-    padding-left: 20px
-}
-
 #evilLine {
     text-decoration: none;
 }
@@ -46,13 +41,8 @@ li {
 }
 
 .logonav {
-    max-width: 50%;
-    max-height: 110px;
-    margin-top: -15px;
-}
-
-.myHiveNav {
-    margin-right: -75px;
+    max-width: 20%;
+    margin-top: -5.5%;
 }
 
 .textCenter {
@@ -60,5 +50,26 @@ li {
 }
 
 .botPadding {
-    padding-bottom: 30px;
+    padding-bottom: 5%;
+}
+
+.botPadding2 {
+    padding-bottom: 2%;
+}
+
+.mar14 {
+    margin-left: 14%;
+}
+
+.marbot {
+    margin-bottom: 1%;
+}
+
+.textDecorationNone {
+    text-decoration: none:
+}
+
+.marLeftRight {
+    margin-left: 5%;
+    margin-right: 5%;
 }

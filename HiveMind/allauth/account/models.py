@@ -210,6 +210,7 @@ class MessageBoard(models.Model):
     user = models.ForeignKey(User, default = 1)
     hivepk = models.IntegerField(default = 0)
     message = models.CharField(max_length = 500, blank = True)
+    time = models.DateTimeField(default=datetime.datetime.now, blank=True)
 
     def __str__(self):
         return self.user
