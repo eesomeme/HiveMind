@@ -28,68 +28,77 @@
 <body class="login-page">
 		<div class="container">
             <div class="row vcenter">
+
 				<div class="col-md-6 col-sm-8 col-xs-12">
-	                <div class="card card-signup">
+					<div class="row">
+						<div class="col-xs-12 logorow">
+							<img src="{% static 'img/logo2.png' %}"  class="login-logo" alt="" />
+						</div>
+					</div>
 
-		                    <h2 class="text-center">Login</h2>
+					<div class="row">
+		                <div class="card card-signup">
 
-							<form class="form" method="POST" action="{% url 'account_login' %}">
-								{% csrf_token %}
-								{% include "socialaccount/snippets/login_extra.html" %}
+			                    <h2 class="text-center">Login To Your Hives</h2>
 
-								<div class="">
-									{{ form.non_field_errors }}
-								</div>
+								<form class="form" method="POST" action="{% url 'account_login' %}">
+									{% csrf_token %}
+									{% include "socialaccount/snippets/login_extra.html" %}
 
-								<div class="content">
-
-		                            <div class="input-group col-sm-offset-2 col-sm-9 col-xs-12">
-		                                <input autofocus="autofocus" id="id_login" maxlength="150" name="login" type="text" class="form-control" placeholder="Username..." required>
-		                            </div>
-
-		                            <div class="input-group col-sm-offset-2 col-sm-9 col-xs-12">
-		                                <input id="id_password" name="password" placeholder="Password..." type="password"  class="form-control" required>
-		                            </div>
-
-									<div class="col-sm-offset-2 col-sm-9 col-xs-12 removePad">
-
-										<div class="col-sm-6 removePad removeBullets">
-											<label for="id_remember">Remember Me:</label>
-											<input id="id_remember" name="remember" type="checkbox">
-										</div>
-
-										<div class="col-sm-6 removePad text-right">
-											<a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-										</div>
-
-										<br></br>
+									<div class="">
+										{{ form.non_field_errors }}
 									</div>
 
-									<div class="col-sm-offset-2 col-sm-9 col-xs-12 removePad">
-										<div class="text-center">
-											<button class="primaryAction btn btn-white" type="submit">{% trans "Login" %}</button>
-											<a class="btn btn-white" href="/accounts/signup">Register</a>
+									<div class="content">
+
+			                            <div class="input-group col-sm-offset-2 col-sm-9 col-xs-12">
+			                                <input autofocus="autofocus" id="id_login" maxlength="150" name="login" type="text" class="form-control" placeholder="Username..." required>
+			                            </div>
+
+			                            <div class="input-group col-sm-offset-2 col-sm-9 col-xs-12">
+			                                <input id="id_password" name="password" placeholder="Password..." type="password"  class="form-control" required>
+			                            </div>
+
+										<div class="col-sm-offset-2 col-sm-9 col-xs-12 removePad">
+
+											<div class="col-sm-6 removePad removeBullets">
+												<label for="id_remember">Remember Me:</label>
+												<input id="id_remember" name="remember" type="checkbox">
+											</div>
+
+											<div class="col-sm-6 removePad text-right">
+												<a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+											</div>
+
 											<br></br>
 										</div>
-									</div>
 
-									<div class="col-sm-offset-2 col-sm-9 col-xs-12 removePad">
-										<div class="text-center">
-											<a title="Facebook" id="evilLine" class="socialaccount_provider facebook" href="/accounts/facebook/login/?process=login">
-												<img src="{% static 'img/FacebookIcon.png' %}">
-											</a>
-											<br></br>
+										<div class="col-sm-offset-2 col-sm-9 col-xs-12 removePad">
+											<div class="text-center">
+												<button class="primaryAction btn btn-warning" type="submit">{% trans "Login" %}</button>
+												<a class="btn btn-warning" href="/accounts/signup">Register</a>
+												<br></br>
+											</div>
 										</div>
-									</div>
 
-		                        </div>
+										<div class="col-sm-offset-2 col-sm-9 col-xs-12 removePad">
+											<div class="text-center">
+												<a title="Facebook" id="evilLine" class="socialaccount_provider facebook" href="/accounts/facebook/login/?process=login">
+													<p>or Login with Facebook</p>
+												</a>
+												<br></br>
+											</div>
+										</div>
 
-								{% if redirect_field_value %}
-								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-								{% endif %}
+			                        </div>
 
-		                    </form>
-		            </div>
+									{% if redirect_field_value %}
+									<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+									{% endif %}
+
+			                    </form>
+			            </div>
+					</div>
 				</div>
             </div>
         </div>

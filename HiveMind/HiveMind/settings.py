@@ -47,6 +47,9 @@ INSTALLED_APPS = [
 
     # Including Facebook as authentication
     'allauth.socialaccount.providers.facebook',
+
+    #Media Cleanup post FileField delete
+    'django_cleanup'
 ]
 
 APP_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -117,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
@@ -143,8 +146,10 @@ AUTHENTICATION_BACKENDS = (
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+LOGIN_REDIRECT_URL = "/"
 
 # LOGIN_REDIRECT_URL = "/account/profile"
+
 ACCOUNT_LOGOUT_REDIRECT_URL ="/accounts/login"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

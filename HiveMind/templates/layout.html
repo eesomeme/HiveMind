@@ -19,6 +19,8 @@
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="{% static 'css/material-kit.css' %}" rel="stylesheet"/>
 	<link href="{% static 'css/styler.css' %}" rel="stylesheet"/>
+	<link href="{% static 'css/loginStyles.css' %}" rel="stylesheet"/>
+	<link href="{% static 'css/myHiveStyles.css' %}" rel="stylesheet"/>
 
 </head>
 
@@ -34,26 +36,22 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
     		</button>
-    		<a class="navbar-brand" href="/accounts/myHive">HiveMind</a>
+			<a class="navbar-brand myHiveNav" href="/accounts/myHive"><img src="{% static 'img/logo3.png' %}" class="logonav" alt=""></a>
+
     	</div>
 
     	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     		<ul class="nav navbar-nav navbar-right">
-				<li class="active"><a href="/accounts/myHive">My Hives</a></li>
+
         		<li class="dropdown">
-        			<a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <b class="caret"></b></a>
                     {% if request.user.is_authenticated %}
-                    <ul class="dropdown-menu">
-					  <li><a href="/accounts/profile">Profile</a></li>
-					  <li class="divider"></li>
-					  <li><a href="/accounts/logout">Logout</a></li>
-        			</ul>
+						<li><a href="/accounts/myHive"><i class="material-icons">public</i>My Hives</a></li>
+						<li><a href="/accounts/profile"><i class="material-icons">persons</i></a></li>
+						<li><a href="/accounts/settings"><i class="material-icons">settings</i></a></li>
+						<li><a href="/accounts/logout">Logout</a></li>
                     {% else %}
-                    <ul class="dropdown-menu">
-					  <li><a href="/accounts/profile">Profile</a></li>
-					  <li class="divider"></li>
 					  <li><a href="/accounts/login">Login</a></li>
-        			</ul>
+
                     {% endif %}
         		</li>
     		</ul>
@@ -64,13 +62,12 @@
 
 <!-- content -->
 <div class="container">
-    <div class="row cold-sm-8">
-        <div class="card text-center">
-        {% block content %}
+    <div class="row col-sm-10 col-sm-offset-1">
+		{% block content %}
 
-        {% endblock %}
-        <br></br>
-        </div>
+
+
+		{% endblock %}
     </div>
 </div>
 <!-- end content -->
