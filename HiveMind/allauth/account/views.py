@@ -1018,6 +1018,24 @@ def SearchUserbase(request):
     peeps = 0
     return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS, 'peeps': peeps,})
 
+def SearchUserbase(request):
+    if not request.user.is_authenticated():
+        return render(request, 'account/login.html')
+    userS = SearchUserForm()
+    peeps = 0
+    if request.method == "POST":
+        userS = SearchUserForm(request.POST or None)
+        print userS
+        user = userS.cleaned_data['username']
+        userlist = User.objects.filter(username__contains=user)
+        if not userlist:
+            peeps = 1
+        return render(request, 'account/search.html', {'userbox':userS, 'peeps': peeps, 'users': userlist})
+
+
+
+    return render(request, 'account/search.html', {'userbox':userS, 'peeps': peeps})
+
 # def profilepicupload(request):
 #     pic = picForm(request.POST or None, request.FILES or None)
 #     hive = get_object_or_404(Hive, pk=hive_id)

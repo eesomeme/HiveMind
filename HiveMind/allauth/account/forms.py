@@ -595,7 +595,6 @@ class SearchUserForm(forms.Form):
 class SearchUniversityForm(forms.Form):
     university = forms.CharField(max_length=900)
 
-
 class ProfileNotesForm(forms.ModelForm):
 
     class Meta:
