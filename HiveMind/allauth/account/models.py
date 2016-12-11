@@ -182,54 +182,55 @@ class EmailConfirmationHMAC:
 from django.contrib.auth.models import Permission, User
 from django.db import models
 
-class Hive(models.Model):
+class Hive(models.Model): #Hive Model,
     user = models.ManyToManyField(User, related_name = "member")
-    course = models.CharField(max_length=500)
+    #ManyToManyField to allow multiple users to assosciated to the Hive. I added a secondary index in order to make search faster and easier(Shaved a some code!!)
+    course = models.CharField(max_length=500) #Name of the Hive
 
     def __str__(self):
-        return self.course
+        return self.course #Returns Hive in the admin Console making it easier for us to test and update results
 
-class Notes(models.Model):
-    hive = models.ForeignKey(Hive, on_delete=models.CASCADE)
-    hivepk = models.IntegerField(default = 0)
-    notes_title = models.CharField(max_length=250)
-    notes_file = models.FileField(default='')
-
-    def __str__(self):
-        return self.notes_title
-
-class ProfileNotes(models.Model):
-    user = models.ForeignKey(User, default = 1)
-    notes_title = models.CharField(max_length=250, blank = True)
-    notes_file = models.FileField(default='')
+class Notes(models.Model): #Notes Model for HIVES
+    hive = models.ForeignKey(Hive, on_delete=models.CASCADE) #The Hive that the Notes are assosciated to
+    hivepk = models.IntegerField(default = 0) #Adds the PK of the Hive in order to make sure notes are private and cannot be accessed through hives of the same Name
+    notes_title = models.CharField(max_length=250) #Notes Name
+    notes_file = models.FileField(default='') #File of the Notes Model(One for every notes, Hives can have many notes associated to them).
 
     def __str__(self):
         return self.notes_title
 
-class MessageBoard(models.Model):
-    user = models.ForeignKey(User, default = 1)
-    hivepk = models.IntegerField(default = 0)
-    message = models.CharField(max_length = 500, blank = True)
-    time = models.DateTimeField(default=datetime.datetime.now, blank=True)
+class ProfileNotes(models.Model): #Notes for the profiles
+    user = models.ForeignKey(User, default = 1) #associated to a user, no need for PK because usernames are unique, and so are user models
+    notes_title = models.CharField(max_length=250, blank = True) #title of the Notes
+    notes_file = models.FileField(default='') #File of the Note
+
+    def __str__(self):
+        return self.notes_title
+
+class MessageBoard(models.Model): #Each is a message to be added to each Hive's message board
+    user = models.ForeignKey(User, default = 1) #User who posted
+    hivepk = models.IntegerField(default = 0) #Pk of the assosicated Hive
+    message = models.CharField(max_length = 500, blank = True) #Message posted
+    time = models.DateTimeField(default=datetime.datetime.now, blank=True) #Date and Time message posted
 
     def __str__(self):
         return self.user
 
-class Bio(models.Model):
-    user = models.ForeignKey(User, default = 1)
-    about = models.CharField(max_length = 500, blank = True)
-
+class Bio(models.Model): #The Bio model for user's bios
+    user = models.ForeignKey(User, default = 1) #One for each user, unique to each of them.
+    about = models.CharField(max_length = 500, blank = True) #What's in the bio
+    #Bios are deleted when updated. A new one is created with the new bio
     def __str__(self):
         return self.user
 
-class profilepic(models.Model):
+class profilepic(models.Model):#Unused but basically it would use an ImageField to stoe a profile pic that would be asssociated to a user and then displayed
     user = models.ForeignKey(User, default = 1)
     image = models.ImageField(default = '')
 
     def __str__(self):
         return self.user
 
-class University(models.Model):
+class University(models.Model): #Unused but would have told everybody what school you are from and allowed a filter in searching
     school = models.CharField(max_length = 900)
     students = models.ManyToManyField(User, related_name = "studentof")
 

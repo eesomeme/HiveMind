@@ -28,6 +28,8 @@ try:
 except ImportError:
     from django.utils.importlib import import_module
 
+
+# These are the forms provided by django allauth that handles the websites authentication
 class PasswordVerificationMixin(object):
     def clean(self):
         cleaned_data = super(PasswordVerificationMixin, self).clean()
@@ -560,33 +562,31 @@ class UserTokenForm(forms.Form):
 
         return cleaned_data
 
+
+# These are our own forms being used. We import the models
 from .models import Hive, Notes, ProfileNotes, Bio, profilepic,University, MessageBoard
 from django import forms
 from django.contrib.auth.models import User
 
+# All the forms are similar except used for different cases, each form shows which model it is
+# associated with and the fields can be seen in the model which range from charField to a fileUpload
 class HiveForm(forms.ModelForm):
-
     class Meta:
         model = Hive
         fields = ['course']
 
 class NotesForm(forms.ModelForm):
-
     class Meta:
         model = Notes
         fields = ['notes_title', 'notes_file']
 
 class AddForm(forms.Form):
-
     addUser = forms.CharField(max_length=250)
 
 class DeleteForm(forms.Form):
-
     notes_title = forms.CharField(max_length=250)
 
-
 class RemoveForm(forms.Form):
-
     removeUser = forms.CharField(max_length=250, required = True)
 
 class SearchUserForm(forms.Form):
@@ -596,14 +596,11 @@ class SearchUniversityForm(forms.Form):
     university = forms.CharField(max_length=900)
 
 class ProfileNotesForm(forms.ModelForm):
-
     class Meta:
         model = ProfileNotes
         fields = ['notes_title', 'notes_file']
 
-
 class BioForm(forms.ModelForm):
-
     class Meta:
         model = Bio
         fields = ['about']
@@ -613,7 +610,7 @@ class PicForm(forms.ModelForm):
         model = profilepic
         fields = ['image']
 
-class SchoolForm(forms.ModelForm):  #form for adding the school you go to.
+class SchoolForm(forms.ModelForm):
     class Meta:
         model = University
         fields = ['school']
@@ -622,10 +619,3 @@ class MessageForm(forms.ModelForm):
     class Meta:
         model = MessageBoard
         fields = ['message']
-#
-# class ProfileForm(forms.ModelForm):
-#
-#     class Meta:
-#         model = ProfilePic
-
-from django.core.files.images import get_image_dimensions
