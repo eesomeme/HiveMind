@@ -6,7 +6,7 @@
 <div class="row">
     <div class="card text-center">
         <h1> Search for Users</h1>
-        <form method="POST" enctype="multipart/form-data" action = "" name = "userbox">
+        <form method="POST" enctype="multipart/form-data" id = "userbox">
             {% csrf_token %}
 
             <div class="col-xs-6 col-xs-offset-3">
@@ -53,8 +53,8 @@
 
 
     function search(event) {
-    // event.preventDefault();
-    var data = new FormData($('username').get(0));
+
+    var data = new FormData($('userbox').get(0));
     console.log(data)
     $.ajax({
         url: $(this).attr('action'),
@@ -62,7 +62,7 @@
 
         data: data,
         cache: false,
-        processData: false,
+        processData: true,
         contentType: false,
 
         success: function(data) {
@@ -74,12 +74,17 @@
     return false;
     }
 
+
     $(function() {
+
+
 
         $('form').submit(search);
 
     });
     </script>
+
+
 
 </script>
 
