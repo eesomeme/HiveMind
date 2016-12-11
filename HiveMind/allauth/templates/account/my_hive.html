@@ -60,7 +60,7 @@
 <!-- end navbar -->
 
 <!-- content -->
-<div class="container">
+<div class="container" id="hives">
 
     <div class="row col-sm-10 col-sm-offset-1">
 
@@ -85,9 +85,9 @@
 
 		{% for hive in hives %}
 		<a href="/accounts/{{ hive.id }}/">
-        <div class="card text-center topPad2 width3 hiveCourse">
+        <div class="card text-center topPad2 width3 hiveCourse" >
 
-			<div class="text-center" id="hives">
+			<div class="text-center">
 				<h2 class="pad60Bot">{{ hive.course }}</h2>
             </div>
 
@@ -117,7 +117,7 @@
 </html>
 
 
-<!-- <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
 
 
 <script>
@@ -147,4 +147,4 @@ $(function() {
     $('form').submit(add);
 
 });
-</script> -->
+</script>

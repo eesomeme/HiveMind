@@ -742,19 +742,19 @@ def settings(request):
 
 
 def profiles(request, username):
-    u = User.objects.get(username = username)
+    u = User.objects.get(username = username)#get's username passed in url
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
 
-    socks = User.objects.filter(username = username)
-    top = socks.first()
-    biop = Bio.objects.filter(user=top)
+    socks = User.objects.filter(username = username) #gets user with the username typed in URL
+    top = socks.first() #filters the user from the query set
+    biop = Bio.objects.filter(user=top) #finds the user's bio
     if not biop:
-        profiledat = "Nothing Here!"
+        profiledat = "Nothing Here!" #If no bio show this
     else:
-        profiledat = biop.first().about
+        profiledat = biop.first().about #Show bio
 
-    user_notes = ProfileNotes.objects.all()
+    user_notes = ProfileNotes.objects.all() #gets all their notes, will display on page
 
     return render(request, 'account/otherprofiles.html', {'user': username, 'u': u, 'bio': profiledat, 'portfolio': user_notes })
 
@@ -762,55 +762,76 @@ def profile(request):
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
     else:
-        form = BioForm(request.POST or None)
-        NotesForm = ProfileNotesForm()
-        if form.is_valid():
-            z = Bio.objects.filter(user=request.user).delete()
+        form = BioForm(request.POST or None) #gets data from bioform
+        NotesForm = ProfileNotesForm(request.POST or None, request.FILES or None) #gets form data for notes
+        Remove = DeleteForm()
+        if request.method == "POST":
+            print request.POST
+            if 'Remove' in request.POST: #if the user asked to remove another user or themselves this will run
 
-            bio = form.save(commit = False)
-            bio.user = request.user
-            bio.save()
+                Remove = DeleteForm(request.POST or None)
+                if Remove.is_valid():
+
+                    notes = Remove.cleaned_data['notes_title']
+                    print notes
+                    x = ProfileNotes.objects.filter(user = request.user, notes_title = notes).delete()
+                    user_notes = ProfileNotes.objects.all()
+
+                    biop = Bio.objects.filter(user=request.user)
+                    profiledat = biop.first()
+                    user_notes = ProfileNotes.objects.all()
+
+                    return render(request, 'account/account_profile.html', {'user': request.user, 'bio': profiledat.about, 'bioform' : form, 'uploader' : NotesForm, 'portfolio': user_notes, 'remove' : Remove})
+
+        if NotesForm.is_valid(): #Valid meaning All required elements of the form are sent in, in this case a title and file
+
+            notes = NotesForm.save(commit = False) #creates new ProfileNotes model with this data
+            notes.user = request.user #commits current user to the model
+            notes.notes_title.lower()
+            # notes.notes_file = request.FILES['notes_file']
+            notes.save() #saves model changes
+            user_notes = ProfileNotes.objects.all()
 
             biop = Bio.objects.filter(user=request.user)
             profiledat = biop.first()
             user_notes = ProfileNotes.objects.all()
 
-            return render(request, 'account/account_profile.html', {'user': request.user, 'bio': profiledat.about, 'bioform' : form, 'uploader' : NotesForm, 'portfolio': user_notes})
-        NotesForm = ProfileNotesForm(request.POST or None, request.FILES or None)
-        if NotesForm.is_valid():
+            return render(request, 'account/account_profile.html', {'user': request.user, 'bio': profiledat.about, 'bioform' : form, 'uploader' : NotesForm, 'portfolio': user_notes, 'remove' : Remove})
 
-            notes = NotesForm.save(commit = False)
-            notes.user = request.user
-            notes.notes_file = request.FILES['notes_file']
-            notes.save()
-            user_notes = ProfileNotes.objects.all()
+        if form.is_valid(): #Valid meaning All required elements of the form are sent in, in this case a title and file
+            z = Bio.objects.filter(user=request.user).delete() #searches for the current bio of the user and deletes it, done so bios can be searchable by user, but also only one be associated to them
+
+            bio = form.save(commit = False) #saves new bio
+            bio.user = request.user #saves this bio to current user
+            bio.save() #saves model to db
+
             biop = Bio.objects.filter(user=request.user)
             profiledat = biop.first()
             user_notes = ProfileNotes.objects.all()
 
-            return render(request, 'account/account_profile.html', {'user': request.user, 'bio': profiledat.about, 'bioform' : form, 'uploader' : NotesForm, 'portfolio': user_notes})
+            return render(request, 'account/account_profile.html', {'user': request.user, 'bio': profiledat.about, 'bioform' : form, 'uploader' : NotesForm, 'portfolio': user_notes, 'remove' : Remove})
 
-        biop = Bio.objects.filter(user=request.user)
+        biop = Bio.objects.filter(user=request.user) #filters in bio model for this current user's
         if not biop:
-            profiledat = "Add A Bio!"
+            profiledat = "Add A Bio!" #default bio if the user currently has none
         else:
-            profiledat = biop.first().about
+            profiledat = biop.first().about #gets user's bio from queryset
 
-        user_notes = ProfileNotes.objects.all()
+        user_notes = ProfileNotes.objects.all() #gets all profile notes in the DB, these are filtered through in the template until only the current user's notes are found and shown
 
-        return render(request, 'account/account_profile.html', {'user': request.user, 'bio': profiledat, 'bioform' : form, 'uploader' : NotesForm, 'portfolio': user_notes})
+        return render(request, 'account/account_profile.html', {'user': request.user, 'bio': profiledat, 'bioform' : form, 'uploader' : NotesForm, 'portfolio': user_notes, 'remove' : Remove})
 
 def myHive(request):
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
     else:
-        form = HiveForm(request.POST or None, request.FILES or None)
-        if form.is_valid():
-            hive = form.save(commit=False)
-            hive.save()
-            hive.user.add(request.user)
-            hives = request.user.member.all()
-            notes_results = Notes.objects.all()
+        form = HiveForm(request.POST or None, request.FILES or None) #Gets data for Hive Form
+        if form.is_valid(): #if the requirements of the HiveForm are met, it is valid
+            hive = form.save(commit=False) #saves form data to new hive
+            hive.save() #saves Hive to DB
+            hive.user.add(request.user) #adds this user to the newly made Hive
+            hives = request.user.member.all() #Members is a secondary index, finds all Hives a user is a member of
+            notes_results = Notes.objects.all() #Gets all notes
             return render(request, 'account/my_hive.html', {
                 'hives': hives,
                 'notes': notes_results,
@@ -819,7 +840,7 @@ def myHive(request):
             })
 
 
-        hives = request.user.member.all()
+        hives = request.user.member.all() #Gets all hives the user is member of.
         notes_results = Notes.objects.all()
         context = {
             'form': form,
@@ -835,18 +856,18 @@ from django.http import HttpResponse
 
 import os.path
 
-def detail(request, hive_id):
+def detail(request, hive_id): #Inside the Hive
 
-
+    #Forms work just as described in above sections, they get the data they are looking for from the post request
     form = NotesForm(request.POST or None, request.FILES or None)
     Dorm = AddForm()
     Remove = RemoveForm()
     Del = DeleteForm()
     Comm = MessageForm(request.POST or None)
-    proper = 0
-    hive = get_object_or_404(Hive, pk=hive_id)
+    proper = 0 #This will check for errors and message the user accordingly
+    hive = get_object_or_404(Hive, pk=hive_id) #gets the hive we are in
 
-    if not Hive.objects.filter(pk = hive_id, user = request.user):
+    if not Hive.objects.filter(pk = hive_id, user = request.user): #Prevents users from brute forcing into a hive by typing in the /[hive_number]
         return redirect('/accounts/profile')
 
 
@@ -854,11 +875,11 @@ def detail(request, hive_id):
         hives_notes = hive.notes_set.all()
         notes = form.save(commit=False)
         notes.hive = hive
-        notes.hivepk = int(hive_id)
-        notes.notes_title = notes.notes_title.lower()
+        notes.hivepk = int(hive_id) #converts hive_id into into and adds it to the notes
+        notes.notes_title = notes.notes_title.lower()#forces the name of all notes to be put into lowercase in order to make deletetions easier
 
-        notes.notes_file = request.FILES['notes_file']
-        notes.save()
+        notes.notes_file = request.FILES['notes_file']#saves the file
+        notes.save() #saves notes model
         user = request.user
         hive = get_object_or_404(Hive,pk = hive_id)
         notes = Notes.objects.all()
@@ -868,19 +889,17 @@ def detail(request, hive_id):
         return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
 
 
-
+        #So here is how the following few conditionals work, if there is a post request the view checks to see where it came from
     if request.method == "POST":
-        if 'add' in request.POST:
+        if 'add' in request.POST: #checks if request is from the add button, else it moves on
             Dorm = AddForm(request.POST or None)
             if Dorm.is_valid():
 
-                added_user = Dorm.cleaned_data['addUser']
-
-                print "'yee'"
+                added_user = Dorm.cleaned_data['addUser'] #gets data from charfield form .
 
                 exist = User.objects.filter(username = added_user)
 
-                if not exist:
+                if not exist: # if the user does not exist the following code returns the page with an error message telling the user they screwed up
                     proper = 4
                     user = request.user
                     hive = get_object_or_404(Hive, pk=hive_id)
@@ -892,9 +911,9 @@ def detail(request, hive_id):
 
                         return redirect('/accounts/myHive')
                     return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
-                if not hive.user.filter(username = exist.first().username):
+                if not hive.user.filter(username = exist.first().username): #if the user exists but isn't in the hive add them
                     hive.user.add(exist.first())
-                elif hive.user.filter(username = exist.first().username):
+                elif hive.user.filter(username = exist.first().username): #if the user does exist but is in the hive this will let them know they screwed up
                     proper = 1
                 user = request.user
                 hive = get_object_or_404(Hive, pk=hive_id)
@@ -903,13 +922,13 @@ def detail(request, hive_id):
                 board = MessageBoard.objects.all()
                 return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
         else:
-            if 'remove' in request.POST:
+            if 'remove' in request.POST: #if the user asked to remove another user or themselves this will run
                 Remove = RemoveForm(request.POST or None)
                 if Remove.is_valid():
 
-                    removeduser = Remove.cleaned_data['removeUser']
+                    removeduser = Remove.cleaned_data['removeUser'] #gets username of user who has to be removed
                     exitR = User.objects.filter(username = removeduser)
-                    if not exitR:
+                    if not exitR: #checks if said user exists, if not returns error message
                         proper = 4
                         user = request.user
                         hive = get_object_or_404(Hive, pk=hive_id)
@@ -921,26 +940,26 @@ def detail(request, hive_id):
                             return redirect('/accounts/myHive')
                         board = MessageBoard.objects.all()
                         return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
-                    if hive.user.filter(username = exitR.first().username):
+                    if hive.user.filter(username = exitR.first().username): #removes user if they are in the hive
                         hive.user.remove(exitR.first())
-                    elif not hive.user.filter(username = exitR.first().username):
+                    elif not hive.user.filter(username = exitR.first().username): #if they aren't in the hive error will be given
                         proper = 2
                     user = request.user
-                    hive = get_object_or_404(Hive, pk=hive_id)
-                    notes = Notes.objects.all()
-                    persons = hive.user.all()
+                    hive = get_object_or_404(Hive, pk=hive_id) #gets hive we are in
+                    notes = Notes.objects.all() #gets all notes to be filter
+                    persons = hive.user.all() #gets all users in current hive
                     if not persons:
-                        Hive.objects.filter(pk = hive_id).delete()
+                        Hive.objects.filter(pk = hive_id).delete() #Should the last person in the Hive decide to leave the Hive, the entire Hive is deleted
 
                         return redirect('/accounts/myHive')
-                    board = MessageBoard.objects.all()
+                    board = MessageBoard.objects.all() #gets all messageboard objects and they'll be filtered in the template for the ones that are connected to the Hive
                     return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete' : Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
 
         if 'delete' in request.POST:
-            Del = DeleteForm(request.POST or None)
+            Del = DeleteForm(request.POST or None) #filter
             if Del.is_valid():
 
-                notes = Del.cleaned_data['notes_title'].lower()
+                notes = Del.cleaned_data['notes_title'].lower() #forces user input to lower case for searching reasons
                 hivepk1 = int(hive_id)
                 print notes
 
@@ -963,7 +982,7 @@ def detail(request, hive_id):
     board = MessageBoard.objects.all()
 
 
-    if Comm.is_valid():
+    if Comm.is_valid(): #MessageBoard Code, saves it and acts like all the other forms above
         new = Comm.save(commit = False)
         new.user = request.user
         new.hivepk = int(hive_id)
@@ -980,61 +999,65 @@ def detail(request, hive_id):
 
     return render(request, 'account/detail.html', {'hive': hive, 'user': user, 'notes': notes, 'form': form, 'dorm': Dorm, 'remove' : Remove, 'delete': Del, 'persons' : persons, 'proper': proper, 'board': board, 'message': Comm})
 
-def DeleteUser(request):
+def DeleteUser(request):# User Deletion
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
 
-    x = User.objects.get(username = request.user.username)
-    x.delete()
+    x = User.objects.get(username = request.user.username) #Searches for the user
+    x.delete() #deletes the user
     return render(request, 'account/login.html')
 
-def SearchUserbase(request):
+# def SearchUserbase(request): #Searches Userbase
+#     if not request.user.is_authenticated():
+#         return render(request, 'account/login.html')
+#     userS = SearchUserForm()
+#     universityS = SearchUniversityForm()
+#
+#     if request.method == "POST": #Acts like the other forms.
+#         userS = UserSearchForm(request.POST or None)
+#         user = userS.cleaned_data['username'] #gets the username
+#         userlist = User.objects.filter(username = user) #searches in the userbase for users with
+#         univeristyS = SearchUniversityForm(request.POST or None) #Searches for the user and then
+#         university = univeristyS.cleaned_data['university']
+#         uniList = University.objects.filter(school = university)
+#         x = User.objects.studentof(uniList.first())
+#
+#         if not userList:
+#             if uniList:
+#                 peeps = 1
+#                 return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS,'university': uniList.first(), 'peeps': peeps, 'thepeople': x})
+#         else:
+#             if not uniList:
+#                 peeps = 2
+#                 return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS,'users': userList.first(),'peeps': peeps, 'thepeople': x})
+#             else:
+#                 peeps = 3
+#                 return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS, 'university': uniList.first(), 'user': userList.first(), 'peeps': peeps, 'thepeople': x})
+#
+#     peeps = 0
+#     return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS, 'peeps': peeps,})
+
+def SearchUserbase(request): #Searching the userbase for inputted text
     if not request.user.is_authenticated():
         return render(request, 'account/login.html')
     userS = SearchUserForm()
-    universityS = SearchUniversityForm()
-
-    if request.method == "POST":
-        userS = UserSearchForm(request.POST or None)
-        user = userS.cleaned_data['username']
-        userlist = User.objects.filter(username = user)
-        univeristyS = SearchUniversityForm(request.POST or None)
-        university = univeristyS.cleaned_data['university']
-        uniList = University.objects.filter(school = university)
-        x = User.objects.studentof(uniList.first())
-
-        if not userList:
-            if uniList:
-                peeps = 1
-                return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS,'university': uniList.first(), 'peeps': peeps, 'thepeople': x})
-        else:
-            if not uniList:
-                peeps = 2
-                return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS,'users': userList.first(),'peeps': peeps, 'thepeople': x})
-            else:
-                peeps = 3
-                return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS, 'university': uniList.first(), 'user': userList.first(), 'peeps': peeps, 'thepeople': x})
-
-    peeps = 0
-    return render(request, 'account/search.html', {'userbox':userS, 'unibox': universityS, 'peeps': peeps,})
-
-def SearchUserbase(request):
-    if not request.user.is_authenticated():
-        return render(request, 'account/login.html')
-    userS = SearchUserForm()
     peeps = 0
     if request.method == "POST":
-        userS = SearchUserForm(request.POST or None)
+        userS = SearchUserForm(request.POST or None) #Gets input
         print userS
-        user = userS.cleaned_data['username']
-        userlist = User.objects.filter(username__contains=user)
-        if not userlist:
+        user = userS.cleaned_data['username']  #gets data for searching
+        userlist = User.objects.filter(username__contains=user) #checks if username contains the inputted data
+        if not userlist: #Tells the user an error if nothing is found
             peeps = 1
         return render(request, 'account/search.html', {'userbox':userS, 'peeps': peeps, 'users': userlist})
 
 
-
+    #else return the right thing.
     return render(request, 'account/search.html', {'userbox':userS, 'peeps': peeps})
+
+
+
+#Twas meant to upload profile pics but it wasn't working out for us on a few levels, but we attempted it
 
 # def profilepicupload(request):
 #     pic = picForm(request.POST or None, request.FILES or None)
